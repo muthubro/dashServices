@@ -1,5 +1,6 @@
 package com.example.dash.payload;
 
+// Generic response for an API call
 public class ApiResponse {
 
 	private boolean status;

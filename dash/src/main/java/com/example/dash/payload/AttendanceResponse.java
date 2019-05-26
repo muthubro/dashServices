@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.example.dash.model.Attendance;
 
+// Response to an attendance GET request
 public class AttendanceResponse {
 
 	private boolean status;

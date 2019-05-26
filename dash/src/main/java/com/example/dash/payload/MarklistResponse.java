@@ -2,6 +2,7 @@ package com.example.dash.payload;
 
 import java.util.Map;
 
+// Response to a marklist GET request
 public class MarklistResponse {
 
 	private boolean status;

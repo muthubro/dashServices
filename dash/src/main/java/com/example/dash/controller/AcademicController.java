@@ -1,9 +1,6 @@
 package com.example.dash.controller;
 
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,12 +22,16 @@ import org.springframework.web.multipart.MultipartFile;
 import com.example.dash.payload.ApiResponse;
 import com.example.dash.payload.MarklistResponse;
 import com.example.dash.service.AcademicService;
+import com.example.dash.utility.ValidationUtility;
 
 @RestController
 public class AcademicController {
 	
 	@Autowired
 	private AcademicService academicService;
+
+	@Autowired
+	private ValidationUtility validationUtility;
 
 	@GetMapping("/api/marklist/{reg}")
 	public ResponseEntity<?> getMarklist(@PathVariable("reg") String reg) {
@@ -46,28 +47,36 @@ public class AcademicController {
 	public ResponseEntity<?> getAcademicReport(@PathVariable("reg") String reg) {
 		byte[] file = academicService.getAcademicReport(reg);
 		
+		// Necessary headers for sending PDF file
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_PDF);
 		String filename = "output.pdf";
 		headers.setContentDispositionFormData(filename, filename);
 		headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
 		
-		ResponseEntity<byte[]> response = new ResponseEntity(file, headers, HttpStatus.OK);
+		ResponseEntity<byte[]> response = new ResponseEntity<byte[]>(file, headers, HttpStatus.OK);
 		return response;
 	}
 	
-	@PostMapping("/api/marklist/{reg}")
+	@PostMapping("/api/marklist")
 	public ResponseEntity<?> recordMarklist(@RequestParam("file") MultipartFile[] files) throws IOException {
 		for (MultipartFile file : files) {
+			// Get excel workbook, worksheet and read the rows
 			XSSFWorkbook workbook = new XSSFWorkbook(file.getInputStream());
 			XSSFSheet worksheet = workbook.getSheetAt(0);
-			
-			Row row = worksheet.getRow(3);
+
+			// Class validation
+			Row row = worksheet.getRow(2);
+			String cls = row.getCell(1).getStringCellValue();
+			if (!validationUtility.validateClass(cls)) {
+				workbook.close();
+				return ResponseEntity.ok(new ApiResponse(false, "Invalid class"));
+			}
+						
+			// Date validation
+			row = worksheet.getRow(3);
 			String date = row.getCell(1).getStringCellValue();
-			Date date1 = new Date();
-			try {
-				date1 = new SimpleDateFormat("dd-MM-yyyy").parse(date);
-			} catch (ParseException ex) {
+			if (!validationUtility.validateDate(date)) {
 				workbook.close();
 				return ResponseEntity.ok(new ApiResponse(false, "Invalid date format"));
 			}
@@ -82,11 +91,18 @@ public class AcademicController {
 				do {
 					row = worksheet.getRow(idx + 5);
 					
+					// ID validation
 					id = row.getCell(0).getStringCellValue();
+					if (!validationUtility.validateStudentID(id)) {
+						workbook.close();
+						return ResponseEntity.ok(new ApiResponse(false, "Invalid student ID"));
+					}
+					
+					// Marks validation
 					try {
 						String temp = row.getCell(2).getStringCellValue();
 						marks = Integer.parseInt(temp);
-					} catch (Exception ex) {
+					} catch (NumberFormatException ex) {
 						workbook.close();
 						return ResponseEntity.ok(new ApiResponse(false, "Invalid marks"));
 					}
@@ -94,7 +110,7 @@ public class AcademicController {
 					marklist.put(id, marks);
 					idx++;
 				} while (idx < stud_count);
-			} catch (Exception ex) {
+			} catch (Exception ex) { // Gives error if number of students in file is less than stud_count
 				workbook.close();
 				return ResponseEntity.ok(new ApiResponse(false, "Wrong number of students"));
 			}

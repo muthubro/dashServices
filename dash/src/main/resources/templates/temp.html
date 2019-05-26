@@ -1,8 +1,13 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <link rel="stylesheet" type="text/css" media="all" href="temp.css" />
 </head>
 <body>
-    <p th:text="'Hello, ' + ${name} + '!'" />
+    <p>Hello, [[${name}]]!</p>
+    <div th:each="student : ${students}">
+        <span>RegNo: [[${student.getRegNo()}]]</span>
+        <span>Name: [[${student.getName()}]]</span>
+    </div>
 </body>
 </html>

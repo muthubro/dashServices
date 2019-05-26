@@ -7,8 +7,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.example.dash.model.Attendance;
@@ -23,12 +21,12 @@ public class AttendanceService {
 		Date date1 = cal.getTime();
 		cal.set(2019, 05, 20);
 		Date date2 = cal.getTime();
-		List<Student> students = new ArrayList(Arrays.asList(
-				new Student("AA0001", "Muathasim Mohamed", new ArrayList(Arrays.asList(
+		List<Student> students = new ArrayList<Student>(Arrays.asList(
+				new Student("12A001", "Muathasim Mohamed", new ArrayList<Attendance>(Arrays.asList(
 							new Attendance(date1, true),
 							new Attendance(date2, false)
 						))),
-				new Student("AA0002", "Abhijit CS", new ArrayList(Arrays.asList(
+				new Student("12A002", "Abhijit CS", new ArrayList<Attendance>(Arrays.asList(
 						new Attendance(date1, false),
 						new Attendance(date2, true)
 					)))
