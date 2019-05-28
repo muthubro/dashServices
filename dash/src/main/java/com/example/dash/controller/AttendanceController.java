@@ -1,11 +1,11 @@
 package com.example.dash.controller;
 
 import java.io.IOException;
-import java.util.Date;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -14,12 +14,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.dash.model.Attendance;
-import com.example.dash.payload.ApiResponse;
+import com.example.dash.payload.AttendanceConfirmationRequest;
 import com.example.dash.payload.AttendanceResponse;
 import com.example.dash.service.AttendanceService;
 import com.example.dash.utility.ValidationUtility;
@@ -34,72 +35,124 @@ public class AttendanceController {
 	private ValidationUtility validationUtility;
 
 	@GetMapping("/api/attendance")
-	public ResponseEntity<?> getAttendance(@RequestParam("id") String reg,
-										  @RequestParam("from") Optional<Date> from,
-										  @RequestParam("to") Optional<Date> to) {
+	public ResponseEntity<AttendanceResponse> getAttendance(@RequestParam("id") String reg,
+										  @RequestParam("from") Optional<String> from,
+										  @RequestParam("to") Optional<String> to) {
 		List<Attendance> attendances = attendanceService.getAttendance(reg, from, to);
-		if (attendances == null) return ResponseEntity.ok(new AttendanceResponse(false, "No user found"));
+		if (attendances == null) return ResponseEntity.ok(new AttendanceResponse(false, "No matching entry found"));
 		return ResponseEntity.ok(new AttendanceResponse(true, "Attendance fetched successfully", attendances));
 	}
 	
 	@PostMapping("/api/attendance")
-	public ResponseEntity<?> recordAttendance(@RequestParam("file") MultipartFile[] files) throws IOException {
+	public ResponseEntity<AttendanceResponse> recordAttendance(@RequestParam("file") MultipartFile[] files) throws IOException {
+		List<Attendance> attendances = new ArrayList<>();
+
 		for (MultipartFile file : files) {
 			// Get excel workbook, worksheet and read the rows
 			XSSFWorkbook workbook = new XSSFWorkbook(file.getInputStream());
 			XSSFSheet worksheet = workbook.getSheetAt(0);
 
-			// Class validation
-			Row row = worksheet.getRow(2);
-			String cls = row.getCell(1).getStringCellValue();
-			if (!validationUtility.validateClass(cls)) {
-				workbook.close();
-				return ResponseEntity.ok(new ApiResponse(false, "Invalid class"));
-			}
-			
 			// Date validation
-			row = worksheet.getRow(3);
+			Row row = worksheet.getRow(1);
 			String date = row.getCell(1).getStringCellValue();
 			if (!validationUtility.validateDate(date)) {
 				workbook.close();
-				return ResponseEntity.ok(new ApiResponse(false, "Invalid date format"));
+				return ResponseEntity.ok(new AttendanceResponse(false, "Invalid date format"));
 			}
 			
-			String id;
-			String status;
-			int stud_count = 3;    // Change to database call
-			Map<String, String> attendances = new HashMap<>();
+			String id, temp = "";
+			int temp2 = 0;
+			boolean status;
+			int leaveStatus;
 			int idx = 0;
 			
 			try {
-				do {
-					row = worksheet.getRow(idx + 5);
+				while (true) {
+					row = worksheet.getRow(idx + 3);
 					
 					// ID validation
 					id = row.getCell(0).getStringCellValue();
 					if (!validationUtility.validateStudentID(id)) {
 						workbook.close();
-						return ResponseEntity.ok(new ApiResponse(false, "Invalid student ID"));
+						return ResponseEntity.ok(new AttendanceResponse(false, "Invalid student ID"));
 					}
 
 					// Status validation
-					status = row.getCell(2).getStringCellValue();
-					if (!status.equals("0") && !status.equals("1")) {
-						workbook.close();
-						return ResponseEntity.ok(new ApiResponse(false, "Invalid attendance status"));
+					try {	// Try to read status as string
+						temp = row.getCell(2).getStringCellValue();
+						if (!temp.equals("0") && !temp.equals("1")) {
+							workbook.close();
+							return ResponseEntity.ok(new AttendanceResponse(false, "Invalid attendance status"));
+						}
+					} catch (Exception ex) {	// If that doesn't work, try to read status as integer
+						try {
+							temp2 = (int) row.getCell(2).getNumericCellValue();
+							if (temp2 != 1 && temp2 != 0) {
+								workbook.close();
+								return ResponseEntity.ok(new AttendanceResponse(false, "Invalid attendance status"));
+							}
+						} catch (Exception e) {		// If even that didn't work, give error
+							workbook.close();
+							return ResponseEntity.ok(new AttendanceResponse(false, "Invalid attendance status"));
+						}
+						temp = temp2 == 1 ? "1" : "0";
 					}
-					
-					attendances.put(id, status);
+					status = temp.equals("1") ? true : false;
+
+					// Leave status validation
+					try {	// Try to read leave status as string
+						temp = row.getCell(3).getStringCellValue();
+					} catch (Exception ex) {	// If that doesn't work, try to read leave status as integer
+						try {
+							temp2 = (int) row.getCell(3).getNumericCellValue();
+						} catch (Exception e) {		// If even that doesn't work, give error
+							workbook.close();
+							return ResponseEntity.ok(new AttendanceResponse(false, "Invalid leave status"));
+						}
+						temp = Integer.toString(temp2);
+					}
+					try {
+						leaveStatus = Integer.parseInt(temp);
+					} catch (NumberFormatException ex) {
+						workbook.close();
+						return ResponseEntity.ok(new AttendanceResponse(false, "Invalid leave status"));
+					}
+					if (leaveStatus < 0 || leaveStatus > 5) {
+						workbook.close();
+						return ResponseEntity.ok(new AttendanceResponse(false, "Invalid leave status"));
+					}
+
+					attendances.add(new Attendance(date, status, leaveStatus));
 					idx++;
-				} while (idx < stud_count);
-			} catch (Exception ex) { // Gives error if number of students in file is less than stud_count
+				}
+			} catch (Exception ex) {
 				workbook.close();
-				return ResponseEntity.ok(new ApiResponse(false, "Wrong number of students"));
 			}
-			
-			workbook.close();
 		}
 		
-		return ResponseEntity.ok(new ApiResponse(true, "Attendance successfully recorded."));
+		return ResponseEntity.ok(new AttendanceResponse(true, "Attendance successfully recorded.", attendances));
+	}
+
+	@PostMapping("/api/attendance/confirm")
+	public ResponseEntity<AttendanceResponse> confirmAttendance(@RequestBody AttendanceConfirmationRequest request) {
+		List<Attendance> attendances = request.getData();
+		List<Attendance> newAttendances = new ArrayList<>();
+
+		// Convert date to datestamp
+		for (Attendance attendance : attendances) {
+			String date = attendance.getDate();
+			Pattern regex = Pattern.compile("(\\d\\d)-(\\d\\d)-(\\d\\d\\d\\d)");
+			Matcher matcher = regex.matcher(date);
+
+			if (!matcher.find()) {
+				return ResponseEntity.ok(new AttendanceResponse(false, "Invalid date format"));
+			}
+
+			String newDate = matcher.group(3) + matcher.group(2) + matcher.group(1);
+			attendance.setDate(newDate);
+
+			newAttendances.add(attendance);
+		}
+		return ResponseEntity.ok(new AttendanceResponse(true, "Attendance confirmed", newAttendances));
 	}
 }

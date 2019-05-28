@@ -2,8 +2,6 @@ package com.example.dash.service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,19 +30,14 @@ public class AcademicService {
 	}
 	
 	public byte[] getAcademicReport(String reg) {
-		Calendar cal = Calendar.getInstance();
-		cal.set(2019, 05, 19);
-		Date date1 = cal.getTime();
-		cal.set(2019, 05, 20);
-		Date date2 = cal.getTime();
 		List<Student> students = new ArrayList<Student>(Arrays.asList(
 				new Student("12A001", "Muathasim Mohamed", new ArrayList<Attendance>(Arrays.asList(
-							new Attendance(date1, true),
-							new Attendance(date2, false)
+							new Attendance("20190519", true, 0),
+							new Attendance("20190520", false, 1)
 						))),
 				new Student("12A002", "Abhijit CS", new ArrayList<Attendance>(Arrays.asList(
-						new Attendance(date1, false),
-						new Attendance(date2, true)
+						new Attendance("20190519", false, 4),
+						new Attendance("20190520", true, 0)
 					)))
 			));
 

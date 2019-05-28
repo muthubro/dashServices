@@ -1,22 +1,22 @@
 package com.example.dash.model;
 
-import java.util.Date;
-
 public class Attendance {
 
-	private Date date;
+	private String date;
 	private boolean status;
+	private int leaveStatus;
 	
-	public Attendance(Date date, boolean status) {
+	public Attendance(String date, boolean status, int leaveStatus) {
 		this.date = date;
 		this.status = status;
+		this.leaveStatus = leaveStatus;
 	}
 
-	public Date getDate() {
+	public String getDate() {
 		return date;
 	}
 
-	public void setDate(Date date) {
+	public void setDate(String date) {
 		this.date = date;
 	}
 
@@ -26,5 +26,13 @@ public class Attendance {
 
 	public void setStatus(boolean status) {
 		this.status = status;
+	}
+
+	public int getLeaveStatus() {
+		return leaveStatus;
+	}
+
+	public void setLeaveStatus(int leaveStatus) {
+		this.leaveStatus = leaveStatus;
 	}
 }

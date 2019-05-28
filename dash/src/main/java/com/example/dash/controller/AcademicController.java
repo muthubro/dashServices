@@ -64,32 +64,24 @@ public class AcademicController {
 			// Get excel workbook, worksheet and read the rows
 			XSSFWorkbook workbook = new XSSFWorkbook(file.getInputStream());
 			XSSFSheet worksheet = workbook.getSheetAt(0);
-
-			// Class validation
-			Row row = worksheet.getRow(2);
-			String cls = row.getCell(1).getStringCellValue();
-			if (!validationUtility.validateClass(cls)) {
-				workbook.close();
-				return ResponseEntity.ok(new ApiResponse(false, "Invalid class"));
-			}
 						
 			// Date validation
-			row = worksheet.getRow(3);
+			Row row = worksheet.getRow(1);
 			String date = row.getCell(1).getStringCellValue();
 			if (!validationUtility.validateDate(date)) {
 				workbook.close();
 				return ResponseEntity.ok(new ApiResponse(false, "Invalid date format"));
 			}
 			
-			String id;
-			int marks;
+			String id, temp = "";
+			int marks, temp2 = 0;
 			int stud_count = 3;    // Change to database call
 			Map<String, Integer> marklist = new HashMap<>();
 			int idx = 0;
 			
 			try {
 				do {
-					row = worksheet.getRow(idx + 5);
+					row = worksheet.getRow(idx + 3);
 					
 					// ID validation
 					id = row.getCell(0).getStringCellValue();
@@ -99,8 +91,18 @@ public class AcademicController {
 					}
 					
 					// Marks validation
+					try {	// Try to read marks as string
+						temp = row.getCell(2).getStringCellValue();
+					} catch (Exception ex) {	// If that doesn't work, try to read marks as integer
+						try {
+							temp2 = (int) row.getCell(2).getNumericCellValue();
+						} catch (Exception e) {		// If even that doesn't work, give error
+							workbook.close();
+							return ResponseEntity.ok(new ApiResponse(false, "Invalid marks"));
+						}
+						temp = Integer.toString(temp2);
+					}
 					try {
-						String temp = row.getCell(2).getStringCellValue();
 						marks = Integer.parseInt(temp);
 					} catch (NumberFormatException ex) {
 						workbook.close();
