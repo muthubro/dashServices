@@ -1,15 +1,32 @@
 package com.example.dash.model;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document(collection = "attendance")
 public class Attendance {
 
+	@Id
+	private String id;
+
+	private String regNo;
 	private String date;
 	private boolean status;
 	private int leaveStatus;
 	
-	public Attendance(String date, boolean status, int leaveStatus) {
+	public Attendance(String regNo, String date, boolean status, int leaveStatus) {
+		this.regNo = regNo;
 		this.date = date;
 		this.status = status;
 		this.leaveStatus = leaveStatus;
+	}
+
+	public String getRegNo() {
+		return regNo;
+	}
+
+	public void setRegNo(String regNo) {
+		this.regNo = regNo;
 	}
 
 	public String getDate() {

@@ -1,13 +1,17 @@
 package com.example.dash.payload;
 
+import com.example.dash.controller.StatusCodes;
+
 // Generic response for an API call
 public class ApiResponse {
 
-	private boolean status;
-	private String message;
+	protected boolean status;
+	protected int statusCode;
+	protected String message;
 	
-	public ApiResponse(boolean status, String message) {
+	public ApiResponse(boolean status, StatusCodes statusCode, String message) {
 		this.status = status;
+		this.statusCode = statusCode.value();
 		this.message = message;
 	}
 
@@ -17,6 +21,14 @@ public class ApiResponse {
 
 	public void setStatus(boolean status) {
 		this.status = status;
+	}
+
+	public int getStatusCode() {
+		return statusCode;
+	}
+
+	public void setStatusCode(int statusCode) {
+		this.statusCode = statusCode;
 	}
 
 	public String getMessage() {

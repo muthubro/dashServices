@@ -2,7 +2,6 @@ package com.example.dash.utility;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,13 +17,11 @@ public class PdfGenerationUtility {
 	@Autowired
 	private TemplateEngine templateEngine;
 	
-	public byte[] createPdf(String templateName, Map map) {
+	public byte[] createPdf(String templateName, Map<String, Object> map) {
 		// Process the template
 		Context context = new Context();
 		if (map != null) {
-			Iterator itMap = map.entrySet().iterator();
-			while (itMap.hasNext()) {
-				Map.Entry entry = (Map.Entry) itMap.next();
+			for (Map.Entry<String, Object> entry : map.entrySet()) {
 				context.setVariable(entry.getKey().toString(), entry.getValue());
 			}
 		}

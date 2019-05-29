@@ -11,26 +11,19 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.dash.model.Attendance;
-import com.example.dash.model.Student;
+import com.example.dash.repository.AttendanceRepository;
 
 @Service
 public class AttendanceService {
 
-	public List<Attendance> getAttendance(String reg, Optional<String> from, Optional<String> to) {
-		List<Student> students = new ArrayList<Student>(Arrays.asList(
-				new Student("12A001", "Muathasim Mohamed", new ArrayList<Attendance>(Arrays.asList(
-							new Attendance("20190519", true, 0),
-							new Attendance("20190520", false, 1)
-						))),
-				new Student("12A002", "Abhijit CS", new ArrayList<Attendance>(Arrays.asList(
-						new Attendance("20190519", false, 4),
-						new Attendance("20190520", true, 0)
-					)))
-			));
+	@Autowired
+	private AttendanceRepository attendanceRepository;
 
+	public List<Attendance> getAttendance(String reg, Optional<String> from, Optional<String> to) {
 		DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
 
 		Date date = new Date();
@@ -40,8 +33,8 @@ public class AttendanceService {
 		Date before = cal.getTime();
 
 		Pattern regex = Pattern.compile("(\\d\\d)-(\\d\\d)-(\\d\\d\\d\\d)");
-
 		String fromDate, toDate;
+
 		if (from.isPresent()) {
 			fromDate = from.get();
 			Matcher matcher = regex.matcher(fromDate);
@@ -62,21 +55,9 @@ public class AttendanceService {
 		}
 		else toDate = dateFormat.format(date);
 
-		int fromStamp = Integer.parseInt(fromDate);
-		int toStamp = Integer.parseInt(toDate);
-
 		List<Attendance> attendances = new ArrayList<>();
-		for (Student student : students) {
-			if (student.getRegNo().equals(reg)) {
-				for (Attendance attendance : student.getAttendance()) {
-					int temp = Integer.parseInt(attendance.getDate());
-					if (temp >= fromStamp && temp <= toStamp) {
-						attendances.add(attendance);
-					}
-				}
-				// return student.getAttendance();
-			}
-		}
+		attendances = attendanceRepository.findByRegNoBetween(reg, fromDate, toDate);
+
 		if (attendances.isEmpty()) return null;
 		return attendances;
 	}

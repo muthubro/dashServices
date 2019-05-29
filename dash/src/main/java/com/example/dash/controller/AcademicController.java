@@ -20,7 +20,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.dash.payload.ApiResponse;
+import com.example.dash.payload.ErrorResponse;
 import com.example.dash.payload.MarklistResponse;
+import com.example.dash.payload.SuccessResponse;
 import com.example.dash.service.AcademicService;
 import com.example.dash.utility.ValidationUtility;
 
@@ -34,13 +36,13 @@ public class AcademicController {
 	private ValidationUtility validationUtility;
 
 	@GetMapping("/api/marklist/{reg}")
-	public ResponseEntity<?> getMarklist(@PathVariable("reg") String reg) {
+	public ResponseEntity<ApiResponse> getMarklist(@PathVariable("reg") String reg) {
 		Map<String, Integer> marklist = academicService.getMarklist(reg);
 		
 		if (marklist == null) {
-			return ResponseEntity.ok(new MarklistResponse(false, "Didn't find marklist"));
+			return ResponseEntity.ok(new ErrorResponse(false, StatusCodes.MISSING_VALUE, "Didn't find marklist"));
 		}
-		return ResponseEntity.ok(new MarklistResponse(true, "Successfully fetched marklist", marklist));
+		return ResponseEntity.ok(new MarklistResponse(true, StatusCodes.SUCCESS, "Successfully fetched marklist", marklist));
 	}
 	
 	@GetMapping("/api/academic/{reg}")
@@ -59,7 +61,7 @@ public class AcademicController {
 	}
 	
 	@PostMapping("/api/marklist")
-	public ResponseEntity<?> recordMarklist(@RequestParam("file") MultipartFile[] files) throws IOException {
+	public ResponseEntity<ApiResponse> recordMarklist(@RequestParam("file") MultipartFile[] files) throws IOException {
 		for (MultipartFile file : files) {
 			// Get excel workbook, worksheet and read the rows
 			XSSFWorkbook workbook = new XSSFWorkbook(file.getInputStream());
@@ -70,7 +72,7 @@ public class AcademicController {
 			String date = row.getCell(1).getStringCellValue();
 			if (!validationUtility.validateDate(date)) {
 				workbook.close();
-				return ResponseEntity.ok(new ApiResponse(false, "Invalid date format"));
+				return ResponseEntity.ok(new ErrorResponse(false, StatusCodes.INPUT_VALIDATION_ERROR, "Invalid date format"));
 			}
 			
 			String id, temp = "";
@@ -87,7 +89,7 @@ public class AcademicController {
 					id = row.getCell(0).getStringCellValue();
 					if (!validationUtility.validateStudentID(id)) {
 						workbook.close();
-						return ResponseEntity.ok(new ApiResponse(false, "Invalid student ID"));
+						return ResponseEntity.ok(new ErrorResponse(false, StatusCodes.INPUT_VALIDATION_ERROR, "Invalid student ID"));
 					}
 					
 					// Marks validation
@@ -98,7 +100,7 @@ public class AcademicController {
 							temp2 = (int) row.getCell(2).getNumericCellValue();
 						} catch (Exception e) {		// If even that doesn't work, give error
 							workbook.close();
-							return ResponseEntity.ok(new ApiResponse(false, "Invalid marks"));
+							return ResponseEntity.ok(new ErrorResponse(false, StatusCodes.INPUT_VALIDATION_ERROR, "Invalid marks"));
 						}
 						temp = Integer.toString(temp2);
 					}
@@ -106,7 +108,7 @@ public class AcademicController {
 						marks = Integer.parseInt(temp);
 					} catch (NumberFormatException ex) {
 						workbook.close();
-						return ResponseEntity.ok(new ApiResponse(false, "Invalid marks"));
+						return ResponseEntity.ok(new ErrorResponse(false, StatusCodes.INPUT_VALIDATION_ERROR, "Invalid marks"));
 					}
 					
 					marklist.put(id, marks);
@@ -114,12 +116,12 @@ public class AcademicController {
 				} while (idx < stud_count);
 			} catch (Exception ex) { // Gives error if number of students in file is less than stud_count
 				workbook.close();
-				return ResponseEntity.ok(new ApiResponse(false, "Wrong number of students"));
+				return ResponseEntity.ok(new ErrorResponse(false, StatusCodes.INPUT_VALIDATION_ERROR, "Wrong number of students"));
 			}
 			
 			workbook.close();
 		}
 		
-		return ResponseEntity.ok(new ApiResponse(true, "Marklist successfully recorded."));
+		return ResponseEntity.ok(new SuccessResponse(true, StatusCodes.SUCCESS, "Marklist successfully recorded."));
 	}
 }

@@ -2,40 +2,17 @@ package com.example.dash.payload;
 
 import java.util.List;
 
+import com.example.dash.controller.StatusCodes;
 import com.example.dash.model.Attendance;
 
 // Response to an attendance GET request
-public class AttendanceResponse {
+public class AttendanceResponse extends ApiResponse {
 
-	private boolean status;
-	private String message;
 	private List<Attendance> data;
 	
-	public AttendanceResponse(boolean status, String message, List<Attendance> data) {
-		this.status = status;
-		this.message = message;
+	public AttendanceResponse(boolean status, StatusCodes statusCode, String message, List<Attendance> data) {
+		super(status, statusCode, message);
 		this.data = data;
-	}
-
-	public AttendanceResponse(boolean status, String message) {
-		this.status = status;
-		this.message = message;
-	}
-
-	public boolean isStatus() {
-		return status;
-	}
-
-	public void setStatus(boolean status) {
-		this.status = status;
-	}
-
-	public String getMessage() {
-		return message;
-	}
-
-	public void setMessage(String message) {
-		this.message = message;
 	}
 
 	public List<Attendance> getData() {

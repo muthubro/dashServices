@@ -2,38 +2,16 @@ package com.example.dash.payload;
 
 import java.util.Map;
 
-// Response to a marklist GET request
-public class MarklistResponse {
+import com.example.dash.controller.StatusCodes;
 
-	private boolean status;
-	private String message;
+// Response to a marklist GET request
+public class MarklistResponse extends ApiResponse {
+
 	private Map<String, Integer> data;
 	
-	public MarklistResponse(boolean status, String message, Map<String, Integer> data) {
-		this.status = status;
-		this.message = message;
+	public MarklistResponse(boolean status, StatusCodes statusCode, String message, Map<String, Integer> data) {
+		super(status, statusCode, message);
 		this.data = data;
-	}
-
-	public MarklistResponse(boolean status, String message) {
-		this.status = status;
-		this.message = message;
-	}
-
-	public boolean isStatus() {
-		return status;
-	}
-
-	public void setStatus(boolean status) {
-		this.status = status;
-	}
-
-	public String getMessage() {
-		return message;
-	}
-
-	public void setMessage(String message) {
-		this.message = message;
 	}
 
 	public Map<String, Integer> getData() {
