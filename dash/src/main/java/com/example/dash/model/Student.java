@@ -1,7 +1,5 @@
 package com.example.dash.model;
 
-import java.util.List;
-
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -25,7 +23,6 @@ public class Student {
     private String postalCode;
     private String city;
     private String state;
-    private List<Detail> otherDetails;
     private boolean isPhotoUploaded;
     private String adminCode;
     private String entryDate;
@@ -36,8 +33,7 @@ public class Student {
 	public Student(String id, String admissionNumber, String name, String mobile, String email, String dob,
 			String guardianName, String guardianMobile, String emergencyContact, String emergencyContactMobile,
 			String addressLineOne, String addressLineTwo, String postalCode, String city, String state,
-			List<Detail> otherDetails, boolean isPhotoUploaded, String adminCode, String entryDate,
-			String admissionDate) {
+			boolean isPhotoUploaded, String adminCode, String entryDate, String admissionDate) {
 		this.admissionNumber = admissionNumber;
 		this.name = name;
 		this.mobile = mobile;
@@ -52,7 +48,6 @@ public class Student {
 		this.postalCode = postalCode;
 		this.city = city;
 		this.state = state;
-		this.otherDetails = otherDetails;
 		this.isPhotoUploaded = isPhotoUploaded;
 		this.adminCode = adminCode;
 		this.entryDate = entryDate;
@@ -177,14 +172,6 @@ public class Student {
     
 	public void setState(String state) {
 		this.state = state;
-    }
-    
-	public List<Detail> getOtherDetails() {
-		return otherDetails;
-    }
-    
-	public void setOtherDetails(List<Detail> otherDetails) {
-		this.otherDetails = otherDetails;
     }
     
 	public boolean isPhotoUploaded() {

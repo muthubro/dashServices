@@ -6,7 +6,9 @@ public enum StatusCodes {
 
     SUCCESS(200),
 
-    MISSING_VALUE(404);
+    MISSING_VALUE(404),
+
+    INTERNAL_SERVER_ERROR(500);
 
     private final int value;
 

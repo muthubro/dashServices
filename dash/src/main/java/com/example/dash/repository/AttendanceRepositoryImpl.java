@@ -14,10 +14,8 @@ public class AttendanceRepositoryImpl implements AttendanceRepositoryCustom {
     private MongoTemplate mongoTemplate;
 
     public MapReduceResults<Map> findAttendances(String reg, String from, String to) {
-        String map = "function() {" +
-                    "   emit(this.regNo, this.date);" +
-                    "}";
-        String reduce = "function(key, values) {return values.length;}";
+        String map = "function() { emit(this.regNo, this.date); }";
+        String reduce = "function(key, values) { return values.length; }";
         
         Query filter = Query.query(Criteria.where("date").gte(from).lte(to));
         MapReduceResults<Map> results;

@@ -14,6 +14,8 @@ import org.xhtmlrenderer.pdf.ITextRenderer;
 @Component
 public class PdfGenerationUtility {
 
+	private static final String FILE_PATH = "file:///D:/Work/Dash/dashServices/dash/src/main/resources/templates/";
+
 	@Autowired
 	private TemplateEngine templateEngine;
 	
@@ -32,7 +34,7 @@ public class PdfGenerationUtility {
 		// Generate the pdf into a byte array
 		try {
 			ITextRenderer renderer = new ITextRenderer();
-			renderer.setDocumentFromString(processedHtml, "file:///D:/Work/Dash/dashServices/dash/src/main/resources/templates/");
+			renderer.setDocumentFromString(processedHtml, FILE_PATH);
 			renderer.layout();
 			renderer.createPDF(outputStream);
 			renderer.finishPDF();

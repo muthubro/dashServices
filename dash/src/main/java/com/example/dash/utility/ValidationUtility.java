@@ -77,8 +77,8 @@ public class ValidationUtility {
     }
 
     public boolean validatePassword(String password) {
-        String temp = StringUtils.trimAllWhitespace(password);
-        if (temp.length() < 6) return false;
+        if (StringUtils.trimAllWhitespace(password).equals("")) return false;
+        if (password.length() < 6) return false;
 
         Pattern pattern = Pattern.compile(PASSWORD_FORMAT);
         Matcher matcher = pattern.matcher(password);

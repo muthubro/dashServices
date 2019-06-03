@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,6 +28,7 @@ import com.example.dash.service.AcademicService;
 import com.example.dash.utility.ValidationUtility;
 
 @RestController
+@RequestMapping("/api")
 public class AcademicController {
 	
 	@Autowired
@@ -35,7 +37,7 @@ public class AcademicController {
 	@Autowired
 	private ValidationUtility validationUtility;
 
-	@GetMapping("/api/marklist/{reg}")
+	@GetMapping("/marklist/{reg}")
 	public ResponseEntity<ApiResponse> getMarklist(@PathVariable("reg") String reg) {
 		Map<String, Integer> marklist = academicService.getMarklist(reg);
 		
@@ -45,7 +47,7 @@ public class AcademicController {
 		return ResponseEntity.ok(new MarklistResponse(true, StatusCodes.SUCCESS, "Successfully fetched marklist", marklist));
 	}
 	
-	@GetMapping("/api/academic/{reg}")
+	@GetMapping("/academic/{reg}")
 	public ResponseEntity<?> getAcademicReport(@PathVariable("reg") String reg) {
 		byte[] file = academicService.getAcademicReport(reg);
 		
@@ -60,7 +62,7 @@ public class AcademicController {
 		return response;
 	}
 	
-	@PostMapping("/api/marklist")
+	@PostMapping("/marklist")
 	public ResponseEntity<ApiResponse> recordMarklist(@RequestParam("file") MultipartFile[] files) throws IOException {
 		for (MultipartFile file : files) {
 			// Get excel workbook, worksheet and read the rows

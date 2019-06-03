@@ -11,20 +11,20 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.dash.model.Attendance;
-import com.example.dash.repository.AttendanceRepository;
+import com.example.dash.model.Homework;
+import com.example.dash.repository.HomeworkRepository;
 import com.example.dash.utility.ConversionUtility;
 
 @Service
-public class AttendanceService {
+public class HomeworkService {
 
 	@Autowired
-	private AttendanceRepository attendanceRepository;
+	private HomeworkRepository homeworkRepository;
 
 	@Autowired
 	private ConversionUtility conversionUtility;
 
-	public List<Attendance> getAttendance(String reg, Optional<String> from, Optional<String> to) {
+	public List<Homework> getHomework(Optional<String> from, Optional<String> to) {
 		DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
 
 		Date date = new Date();
@@ -47,10 +47,10 @@ public class AttendanceService {
 		}
 		else toDate = dateFormat.format(date);
 
-		List<Attendance> attendances = new ArrayList<>();
-		attendances = attendanceRepository.findByRegNoAndDateBetween(reg, fromDate, toDate);
+		List<Homework> homeworks = new ArrayList<>();
+		homeworks = homeworkRepository.findByDateBetween(fromDate, toDate);
 
-		if (attendances.isEmpty()) return null;
-		return attendances;
+		if (homeworks.isEmpty()) return null;
+		return homeworks;
 	}
 }
