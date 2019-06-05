@@ -2,9 +2,10 @@ package com.example.dash.payload;
 
 import java.util.List;
 
-import com.example.dash.controller.StatusCodes;
+import com.example.dash.service.StatusCodes;
 import com.example.dash.model.Student;
 
+// Response to a student list GET request
 public class StudentsResponse extends ApiResponse {
 
 	private List<Student> data;

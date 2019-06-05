@@ -10,8 +10,9 @@ import org.springframework.stereotype.Component;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
+// Utility to generate and validate JWTs
 @Component
-public class JwtTokenUtility {
+public class JwtUtility {
 
     @Value("${app.security.jwtSecret}")
     private String jwtSecret;

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.example.dash.model.Attendance;
 
+// Request format for attendance confirmation
 public class AttendanceConfirmationRequest {
 
     private List<Attendance> data;

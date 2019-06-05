@@ -1,5 +1,6 @@
 package com.example.dash.payload;
 
+// Request format for signup
 public class SignupRequest {
 
     private String name;

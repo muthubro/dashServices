@@ -2,7 +2,7 @@ package com.example.dash.payload;
 
 import java.util.Map;
 
-import com.example.dash.controller.StatusCodes;
+import com.example.dash.service.StatusCodes;
 
 // Response to a marklist GET request
 public class MarklistResponse extends ApiResponse {

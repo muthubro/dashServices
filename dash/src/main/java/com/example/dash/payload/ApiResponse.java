@@ -1,6 +1,6 @@
 package com.example.dash.payload;
 
-import com.example.dash.controller.StatusCodes;
+import com.example.dash.service.StatusCodes;
 
 // Generic response for an API call
 public class ApiResponse {

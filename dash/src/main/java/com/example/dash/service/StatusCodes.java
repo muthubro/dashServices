@@ -1,5 +1,6 @@
-package com.example.dash.controller;
+package com.example.dash.service;
 
+// Status codes used in the API responses
 public enum StatusCodes {
 
     INPUT_VALIDATION_ERROR(101),

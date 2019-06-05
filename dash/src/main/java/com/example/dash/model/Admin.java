@@ -7,6 +7,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "admin", uniqueConstraints = {
@@ -20,13 +21,16 @@ public class Admin {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
+	@NotBlank
+	@Size(min = 3)
     private String name;
 
-    @NotBlank
+	@NotBlank
+	@Size(min = 10, max = 10)
     private String username;
 
-    @NotBlank
+	@NotBlank
+	@Size(min = 6)
     private String password;
 
     public Admin() {}

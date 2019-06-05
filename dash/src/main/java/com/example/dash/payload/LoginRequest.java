@@ -1,5 +1,6 @@
 package com.example.dash.payload;
 
+// Request format for login
 public class LoginRequest {
 
     private String username;

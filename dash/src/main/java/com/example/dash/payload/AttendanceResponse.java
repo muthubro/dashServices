@@ -2,7 +2,7 @@ package com.example.dash.payload;
 
 import java.util.List;
 
-import com.example.dash.controller.StatusCodes;
+import com.example.dash.service.StatusCodes;
 import com.example.dash.model.Attendance;
 
 // Response to an attendance GET request

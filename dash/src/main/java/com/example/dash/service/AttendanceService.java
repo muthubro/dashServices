@@ -1,5 +1,6 @@
 package com.example.dash.service;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -8,12 +9,20 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.dash.model.Attendance;
+import com.example.dash.payload.ApiResponse;
+import com.example.dash.payload.AttendanceResponse;
+import com.example.dash.payload.ErrorResponse;
 import com.example.dash.repository.AttendanceRepository;
-import com.example.dash.utility.ConversionUtility;
+import com.example.dash.utility.MiscUtilities;
+import com.example.dash.utility.ValidationUtility;;
 
 @Service
 public class AttendanceService {
@@ -22,35 +31,149 @@ public class AttendanceService {
 	private AttendanceRepository attendanceRepository;
 
 	@Autowired
-	private ConversionUtility conversionUtility;
+	private ValidationUtility validationUtility;
 
-	public List<Attendance> getAttendance(String reg, Optional<String> from, Optional<String> to) {
-		DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+	@Autowired
+	private MiscUtilities utilities;
 
-		Date date = new Date();
+	public ApiResponse getAttendance(String reg, Optional<String> from, Optional<String> to) {
+		DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");	// Datestamp format
+
+		Date date = new Date();		// Default 'to' date
 
 		Calendar cal = Calendar.getInstance();
 		cal.add(Calendar.DATE, -31);
-		Date before = cal.getTime();
+		Date before = cal.getTime();	// Default 'from' date
 
 		String fromDate, toDate;
 
+		// If from and to dates are given, convert to datestamp. Else use default
 		if (from.isPresent()) {
 			fromDate = from.get();
-			fromDate = conversionUtility.convertDateToDatestamp(fromDate);
+			fromDate = utilities.convertDateToDatestamp(fromDate);
 		}
 		else fromDate = dateFormat.format(before);
 
 		if (to.isPresent()) {
 			toDate = to.get();
-			toDate = conversionUtility.convertDateToDatestamp(toDate);
+			toDate = utilities.convertDateToDatestamp(toDate);
 		}
 		else toDate = dateFormat.format(date);
 
 		List<Attendance> attendances = new ArrayList<>();
-		attendances = attendanceRepository.findByRegNoAndDateBetween(reg, fromDate, toDate);
+		attendances = attendanceRepository.findByRegNoAndDateBetweenInclusive(reg, fromDate, toDate);
 
-		if (attendances.isEmpty()) return null;
-		return attendances;
+		if (attendances.isEmpty()) return new ErrorResponse(false, StatusCodes.MISSING_VALUE, "No matching entry found");
+		return new AttendanceResponse(true, StatusCodes.SUCCESS, "Attendance fetched successfully", attendances);
+	}
+
+	public ApiResponse recordAttendance(MultipartFile file) throws IOException {
+		List<Attendance> attendances = new ArrayList<>();
+
+		// Get excel workbook, worksheet and read the rows
+		XSSFWorkbook workbook;
+		try {
+			workbook = new XSSFWorkbook(file.getInputStream());
+		} catch (IOException ex) {
+			return new ErrorResponse(false, StatusCodes.INTERNAL_SERVER_ERROR, "Could not read file.");
+		}
+		XSSFSheet worksheet = workbook.getSheetAt(0);
+
+		// Date validation
+		Row row = worksheet.getRow(1);
+		String date = row.getCell(1).getStringCellValue();
+		if (!validationUtility.validateDate(date)) {
+			workbook.close();
+			return new ErrorResponse(false, StatusCodes.INPUT_VALIDATION_ERROR, "Invalid date format");
+		}
+		
+		String id, temp = "";
+		int temp2 = 0;
+		boolean status;
+		int leaveStatus;
+		int idx = 0;
+		
+		try {
+			while (true) {
+				row = worksheet.getRow(idx + 3);
+				
+				// ID validation
+				id = row.getCell(0).getStringCellValue();
+				if (!validationUtility.validateStudentID(id)) {
+					workbook.close();
+					return new ErrorResponse(false, StatusCodes.INPUT_VALIDATION_ERROR, "Invalid student ID");
+				}
+
+				// Status validation
+				try {	// Try to read status as string
+					temp = row.getCell(2).getStringCellValue();
+					if (!temp.equals("0") && !temp.equals("1")) {
+						workbook.close();
+						return new ErrorResponse(false, StatusCodes.INPUT_VALIDATION_ERROR, "Invalid attendance status");
+					}
+				} catch (Exception ex) {	// If that doesn't work, try to read status as integer
+					try {
+						temp2 = (int) row.getCell(2).getNumericCellValue();
+						if (temp2 != 1 && temp2 != 0) {
+							workbook.close();
+							return new ErrorResponse(false, StatusCodes.INPUT_VALIDATION_ERROR, "Invalid attendance status");
+						}
+					} catch (Exception e) {		// If even that didn't work, give error
+						workbook.close();
+						return new ErrorResponse(false, StatusCodes.INPUT_VALIDATION_ERROR, "Invalid attendance status");
+					}
+					temp = temp2 == 1 ? "1" : "0";
+				}
+				status = temp.equals("1") ? true : false;
+
+				// Leave status validation
+				try {	// Try to read leave status as string
+					temp = row.getCell(3).getStringCellValue();
+				} catch (Exception ex) {	// If that doesn't work, try to read leave status as integer
+					try {
+						temp2 = (int) row.getCell(3).getNumericCellValue();
+					} catch (Exception e) {		// If even that doesn't work, give error
+						workbook.close();
+						return new ErrorResponse(false, StatusCodes.INPUT_VALIDATION_ERROR, "Invalid leave status");
+					}
+					temp = Integer.toString(temp2);
+				}
+				try {
+					leaveStatus = Integer.parseInt(temp);
+				} catch (NumberFormatException ex) {
+					workbook.close();
+					return new ErrorResponse(false, StatusCodes.INPUT_VALIDATION_ERROR, "Invalid leave status");
+				}
+				if (leaveStatus < 0 || leaveStatus > 5) {
+					workbook.close();
+					return new ErrorResponse(false, StatusCodes.INPUT_VALIDATION_ERROR, "Invalid leave status");
+				}
+
+				attendances.add(new Attendance(id, date, status, leaveStatus));
+				idx++;
+			}
+		} catch (Exception ex) { // Close when blank cell is encountered
+			workbook.close();
+		}
+		
+		return new AttendanceResponse(true, StatusCodes.SUCCESS, "Attendance successfully recorded.", attendances);
+	}
+
+	public ApiResponse confirmAttendance(List<Attendance> attendances) {
+		List<Attendance> newAttendances = new ArrayList<>();
+
+		// Convert dates to datestamps
+		for (Attendance attendance : attendances) {
+			String date = attendance.getDate();
+			date = utilities.convertDateToDatestamp(date);
+
+			if (date == null) {
+				return new ErrorResponse(false, StatusCodes.INPUT_VALIDATION_ERROR, "Invalid date format");
+			}
+
+			attendance.setDate(date);
+			newAttendances.add(attendance);
+		}
+		return new AttendanceResponse(true, StatusCodes.SUCCESS, "Attendance confirmed", newAttendances);
 	}
 }
