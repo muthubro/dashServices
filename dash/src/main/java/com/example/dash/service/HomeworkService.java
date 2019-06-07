@@ -1,3 +1,13 @@
+/*
+ * Version			: 1.0
+ * Developer 		: Muathasim Mohamed P
+ * Email			: muth4muathasim@gmail.com			
+ * Date				: 06 June 2019
+ * Modified Date	: 06 June 2019	
+ * Comments			: 
+ */
+
+
 package com.example.dash.service;
 
 import java.io.File;
@@ -62,7 +72,7 @@ public class HomeworkService {
 		Date date = new Date();     // Default 'to' date
 
 		Calendar cal = Calendar.getInstance();
-		cal.add(Calendar.DATE, -31);
+		cal.set(Calendar.DAY_OF_MONTH, 1);
 		Date before = cal.getTime();    // Default 'from' date
 
 		String fromDate, toDate;

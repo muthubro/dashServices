@@ -1,9 +1,20 @@
+/*
+ * Version			: 1.0
+ * Developer 		: Muathasim Mohamed P
+ * Email			: muth4muathasim@gmail.com			
+ * Date				: 06 June 2019
+ * Modified Date	: 06 June 2019	
+ * Comments			: 
+ */
+
+
 package com.example.dash.model;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotBlank;
@@ -31,7 +42,10 @@ public class Admin {
 
 	@NotBlank
 	@Size(min = 6)
-    private String password;
+	private String password;
+	
+	@ManyToOne
+	private Role role;
 
     public Admin() {}
     
@@ -71,5 +85,13 @@ public class Admin {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
 	}
 }

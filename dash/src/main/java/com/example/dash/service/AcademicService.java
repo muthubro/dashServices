@@ -1,3 +1,13 @@
+/*
+ * Version			: 1.0
+ * Developer 		: Muathasim Mohamed P
+ * Email			: muth4muathasim@gmail.com			
+ * Date				: 06 June 2019
+ * Modified Date	: 06 June 2019	
+ * Comments			: 
+ */
+
+
 package com.example.dash.service;
 
 import java.io.IOException;
@@ -24,6 +34,8 @@ import com.example.dash.utility.ValidationUtility;
 
 @Service
 public class AcademicService {
+
+	private static final int EXCEL_HEADER_COUNT = 3;
 	
 	@Autowired
 	private PdfGenerationUtility pdfUtil;
@@ -84,10 +96,14 @@ public class AcademicService {
 		
 		try {
 			while (true) {
-				row = worksheet.getRow(idx + 3);
+				row = worksheet.getRow(idx + EXCEL_HEADER_COUNT);
 				
 				// ID validation
 				id = row.getCell(0).getStringCellValue();
+				if (id.isEmpty()) {
+					workbook.close();
+					break;
+				}
 				if (!validationUtility.validateStudentID(id)) {
 					workbook.close();
 					return new ErrorResponse(false, StatusCodes.INPUT_VALIDATION_ERROR, "Invalid student ID");
@@ -115,7 +131,7 @@ public class AcademicService {
 				marklist.put(id, marks);
 				idx++;
 			}
-		} catch (Exception ex) { // Close when blank cell is encountered
+		} catch (Exception ex) { // Close when file end is encountered
 			workbook.close();
 		}
 		

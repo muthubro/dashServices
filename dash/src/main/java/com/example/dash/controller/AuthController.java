@@ -1,5 +1,16 @@
+/*
+ * Version			: 1.0
+ * Developer 		: Muathasim Mohamed P
+ * Email			: muth4muathasim@gmail.com			
+ * Date				: 06 June 2019
+ * Modified Date	: 06 June 2019	
+ * Comments			: 
+ */
+
+
 package com.example.dash.controller;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import com.example.dash.payload.ApiResponse;
@@ -26,7 +37,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ApiResponse login(@Valid @RequestBody LoginRequest loginRequest) {
-        return authService.login(loginRequest);
+    public ApiResponse login(@Valid @RequestBody LoginRequest loginRequest, HttpServletRequest request) {
+        return authService.login(loginRequest, request);
     }
 }

@@ -10,15 +10,11 @@
 
 package com.example.dash.repository;
 
-import java.util.Optional;
-
-import com.example.dash.model.Admin;
+import com.example.dash.model.Role;
+import com.example.dash.model.RoleName;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface AdminRepository extends JpaRepository<Admin, String> {
-
-    Optional<Admin> findById(Long id);
-
-    Optional<Admin> findByUsername(String username);
+public interface RoleRepository extends JpaRepository<Role, Long> {
+    Role findByName(RoleName roleName);
 }

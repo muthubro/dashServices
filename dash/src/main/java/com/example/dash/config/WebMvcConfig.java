@@ -1,3 +1,13 @@
+/*
+ * Version			: 1.0
+ * Developer 		: Muathasim Mohamed P
+ * Email			: muth4muathasim@gmail.com			
+ * Date				: 06 June 2019
+ * Modified Date	: 06 June 2019	
+ * Comments			: Change allowed origins to the appropriate url
+ */
+
+
 package com.example.dash.config;
 
 import org.springframework.context.annotation.Configuration;

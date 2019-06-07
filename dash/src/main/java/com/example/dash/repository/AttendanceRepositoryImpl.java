@@ -1,3 +1,13 @@
+/*
+ * Version			: 1.0
+ * Developer 		: Muathasim Mohamed P
+ * Email			: muth4muathasim@gmail.com			
+ * Date				: 06 June 2019
+ * Modified Date	: 06 June 2019	
+ * Comments			: findAttendances does not work
+ */
+
+
 package com.example.dash.repository;
 
 import java.util.List;
@@ -27,7 +37,8 @@ public class AttendanceRepositoryImpl implements AttendanceRepositoryCustom {
 
     // An attempt at mongodb map reduce (Does not work right now)
     public MapReduceResults<Map> findAttendances(String reg, String from, String to) {
-        String map = "function() { emit(this.regNo, this.date); }";
+        String map = "function() { emit([this.regNo,this.date], this.mark); }";
+       
         String reduce = "function(key, values) { return values.length; }";
         
         Query filter = Query.query(Criteria.where("date").gte(from).lte(to));

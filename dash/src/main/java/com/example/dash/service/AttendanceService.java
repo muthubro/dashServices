@@ -1,3 +1,13 @@
+/*
+ * Version			: 1.0
+ * Developer 		: Muathasim Mohamed P
+ * Email			: muth4muathasim@gmail.com			
+ * Date				: 06 June 2019
+ * Modified Date	: 06 June 2019	
+ * Comments			: 
+ */
+
+
 package com.example.dash.service;
 
 import java.io.IOException;
@@ -20,12 +30,15 @@ import com.example.dash.model.Attendance;
 import com.example.dash.payload.ApiResponse;
 import com.example.dash.payload.AttendanceResponse;
 import com.example.dash.payload.ErrorResponse;
+import com.example.dash.payload.SuccessResponse;
 import com.example.dash.repository.AttendanceRepository;
 import com.example.dash.utility.MiscUtilities;
 import com.example.dash.utility.ValidationUtility;;
 
 @Service
 public class AttendanceService {
+
+	private static final int EXCEL_HEADER_COUNT = 3;
 
 	@Autowired
 	private AttendanceRepository attendanceRepository;
@@ -42,8 +55,8 @@ public class AttendanceService {
 		Date date = new Date();		// Default 'to' date
 
 		Calendar cal = Calendar.getInstance();
-		cal.add(Calendar.DATE, -31);
-		Date before = cal.getTime();	// Default 'from' date
+		cal.set(Calendar.DAY_OF_MONTH, 1);
+		Date before = cal.getTime();	// Default 'from' date (beginning of month)
 
 		String fromDate, toDate;
 
@@ -95,10 +108,14 @@ public class AttendanceService {
 		
 		try {
 			while (true) {
-				row = worksheet.getRow(idx + 3);
+				row = worksheet.getRow(idx + EXCEL_HEADER_COUNT);
 				
 				// ID validation
 				id = row.getCell(0).getStringCellValue();
+				if (id.isEmpty()) {
+					workbook.close();
+					break;
+				}
 				if (!validationUtility.validateStudentID(id)) {
 					workbook.close();
 					return new ErrorResponse(false, StatusCodes.INPUT_VALIDATION_ERROR, "Invalid student ID");
@@ -152,7 +169,7 @@ public class AttendanceService {
 				attendances.add(new Attendance(id, date, status, leaveStatus));
 				idx++;
 			}
-		} catch (Exception ex) { // Close when blank cell is encountered
+		} catch (Exception ex) { // Close when file end is encountered
 			workbook.close();
 		}
 		
@@ -160,8 +177,6 @@ public class AttendanceService {
 	}
 
 	public ApiResponse confirmAttendance(List<Attendance> attendances) {
-		List<Attendance> newAttendances = new ArrayList<>();
-
 		// Convert dates to datestamps
 		for (Attendance attendance : attendances) {
 			String date = attendance.getDate();
@@ -172,8 +187,8 @@ public class AttendanceService {
 			}
 
 			attendance.setDate(date);
-			newAttendances.add(attendance);
+			attendanceRepository.save(attendance);
 		}
-		return new AttendanceResponse(true, StatusCodes.SUCCESS, "Attendance confirmed", newAttendances);
+		return new SuccessResponse(true, StatusCodes.SUCCESS, "Attendance confirmed");
 	}
 }
