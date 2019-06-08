@@ -22,6 +22,16 @@
             "name": "Debug (Launch)-RegistrationNumber",
             "request": "launch",
             "mainClass": "RegistrationNumber"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-DashApplication<dash>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "mainClass": "com.accelerate.dash.DashApplication",
+            "projectName": "dash",
+            "args": ""
         }
     ]
 }
