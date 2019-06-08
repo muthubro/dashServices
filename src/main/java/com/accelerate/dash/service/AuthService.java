@@ -3,7 +3,7 @@
  * Developer 		: Muathasim Mohamed P
  * Email			: muth4muathasim@gmail.com			
  * Date				: 06 June 2019
- * Modified Date	: 06 June 2019	
+ * Modified Date	: 08 June 2019	
  * Comments			: 
  */
 
@@ -19,6 +19,7 @@ import com.accelerate.dash.payload.ApiResponse;
 import com.accelerate.dash.payload.ErrorResponse;
 import com.accelerate.dash.payload.LoginRequest;
 import com.accelerate.dash.payload.LoginResponse;
+import com.accelerate.dash.payload.LoginWithDashRequest;
 import com.accelerate.dash.payload.SignupRequest;
 import com.accelerate.dash.payload.SuccessResponse;
 import com.accelerate.dash.repository.AdminRepository;
@@ -98,5 +99,19 @@ public class AuthService {
 
         String jwt = jwtUtility.generateToken(authentication);
         return new LoginResponse(true, StatusCodes.SUCCESS, "Login successful", jwt);
+    }
+
+    public String loginWithDash(LoginWithDashRequest request) {
+        String username = request.getUsername();
+        username = username.trim();
+        if (!validationUtility.validateMobile(username))
+            return null;
+
+        String password = request.getPassword();
+
+        if (password.equals("000"))
+            return jwtUtility.generateToken(username);
+
+        else return null;
     }
 }

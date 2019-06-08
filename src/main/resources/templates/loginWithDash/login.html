@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+        <title>Login With Dash</title>
+    
+        <link rel="stylesheet" th:href="@{/assets/css/bootstrap/bootstrap.css}"/>
+        <link rel="stylesheet" href="../../static/loginWithDash/login.css" th:href="@{/loginWithDash/login.css}"/>
+    </head>
+    <body>
+        <div class="login-form col-md-4 offset-md-4 col-sm-8 offset-sm-2 col-10 offset-1">
+            <h2 class="text-center">Login</h2>
+            <form action="#" th:action="@{/api/login-with-dash}" th:object="${request}" method="POST" class="form-group">
+                <p>Username<input type="text" th:field="*{username}" placeholder="username" class="form-control" /></p>
+                <p>Password<input type="password" th:field="*{password}" placeholder="password" class="form-control" /></p>
+                <input type="text" value="something" th:value="${url}" th:name="redirectUrl" hidden />
+                <input type="text" value="something" th:value="${protocol}" th:name="protocol" hidden />
+                <p><input type="submit" value="Submit" class="btn btn-primary" /></p>
+            </form>
+        </div>
+    </body>
+</html>
