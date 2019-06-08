@@ -3,7 +3,7 @@
  * Developer 		: Muathasim Mohamed P
  * Email			: muth4muathasim@gmail.com			
  * Date				: 06 June 2019
- * Modified Date	: 06 June 2019	
+ * Modified Date	: 08 June 2019	
  * Comments			: 
  */
 
@@ -34,13 +34,26 @@ public class JwtUtility {
 
     public String generateToken(Authentication authentication) {
         UserPrincipal admin = (UserPrincipal) authentication.getPrincipal();
-        Long id = admin.getId();
+        String username = admin.getUsername();
 
         Date now = new Date();
         Date exp = new Date(now.getTime() + jwtExpiration);
 
         String jwt = Jwts.builder()
-                        .setSubject(Long.toString(id))
+                        .setSubject(username)
+                        .setIssuedAt(new Date())
+                        .setExpiration(exp)
+                        .signWith(SignatureAlgorithm.HS512, jwtSecret)
+                        .compact();        
+        return jwt;
+    }
+
+    public String generateToken(String username) {
+        Date now = new Date();
+        Date exp = new Date(now.getTime() + jwtExpiration);
+
+        String jwt = Jwts.builder()
+                        .setSubject(username)
                         .setIssuedAt(new Date())
                         .setExpiration(exp)
                         .signWith(SignatureAlgorithm.HS512, jwtSecret)

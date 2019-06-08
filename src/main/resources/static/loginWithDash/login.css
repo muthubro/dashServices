@@ -1,0 +1,11 @@
+input {
+    border: 1px solid gray;
+    border-radius: 2px;
+}
+
+.login-form {
+    margin-top: 10%;
+    padding: 1rem 2rem 2rem 2rem;
+    border-radius: 5px;
+    border: 1px solid rgba(128, 128, 128, 0.5);
+}
