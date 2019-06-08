@@ -58,7 +58,7 @@ public class AcademicService {
 		// Create PDF file as a byte array
 		Map<String, Object> data = new HashMap<>();
 		data.put("name", reg);
-		byte[] file = pdfUtil.createPdf("temp", data);
+		byte[] file = pdfUtil.createPdf("academic", "temp", data);
 		
 		// Set necessary headers to send PDF
 		HttpHeaders headers = new HttpHeaders();

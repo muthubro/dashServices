@@ -4,7 +4,7 @@
  * Email			: muth4muathasim@gmail.com			
  * Date				: 06 June 2019
  * Modified Date	: 06 June 2019	
- * Comments			: 
+ * Comments			: Change file path to the location of the template and accompanying files
  */
 
 
@@ -24,12 +24,12 @@ import org.xhtmlrenderer.pdf.ITextRenderer;
 @Component
 public class PdfGenerationUtility {
 
-	private static final String FILE_PATH = "file:///D:/Work/Dash/dashServices/dash/src/main/resources/templates/";
+	private static final String FILE_PATH = "file:///D:/Work/Dash/dashServices/src/main/resources/static/";
 
 	@Autowired
 	private TemplateEngine templateEngine;
 	
-	public byte[] createPdf(String templateName, Map<String, Object> map) {
+	public byte[] createPdf(String dirName, String templateName, Map<String, Object> map) {
 		// Process the template
 		Context context = new Context();
 		if (map != null) {
@@ -38,13 +38,13 @@ public class PdfGenerationUtility {
 			}
 		}
 		
-		String processedHtml = templateEngine.process(templateName, context);
+		String processedHtml = templateEngine.process(dirName + "/" + templateName, context);
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 		
 		// Generate the pdf into a byte array
 		try {
 			ITextRenderer renderer = new ITextRenderer();
-			renderer.setDocumentFromString(processedHtml, FILE_PATH);
+			renderer.setDocumentFromString(processedHtml, FILE_PATH + dirName + "/");
 			renderer.layout();
 			renderer.createPDF(outputStream);
 			renderer.finishPDF();
