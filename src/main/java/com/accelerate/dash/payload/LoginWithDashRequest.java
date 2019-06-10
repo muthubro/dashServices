@@ -3,13 +3,14 @@
  * Developer 		: Muathasim Mohamed P
  * Email			: muth4muathasim@gmail.com			
  * Date				: 06 June 2019
- * Modified Date	: 08 June 2019	
+ * Modified Date	: 09 June 2019	
  * Comments			: 
  */
 
 
 package com.accelerate.dash.payload;
 
+// Request format for the Login With Dash feature
 public class LoginWithDashRequest {
 
     private String username;
@@ -20,13 +21,16 @@ public class LoginWithDashRequest {
 
     private String protocol;
 
+    private String reference;
+
     public LoginWithDashRequest() {}
 
-	public LoginWithDashRequest(String username, String password, String redirectUrl, String protocol) {
+	public LoginWithDashRequest(String username, String password, String redirectUrl, String protocol, String reference) {
 		this.username = username;
 		this.password = password;
         this.redirectUrl = redirectUrl;
         this.protocol = protocol;
+        this.reference = reference;
 	}
 
     public String getUsername() {
@@ -59,5 +63,13 @@ public class LoginWithDashRequest {
 
     public void setProtocol(String protocol) {
         this.protocol = protocol;
+    }
+
+    public String getReference() {
+        return reference;
+    }
+
+    public void setReference(String reference) {
+        this.reference = reference;
     }
 }

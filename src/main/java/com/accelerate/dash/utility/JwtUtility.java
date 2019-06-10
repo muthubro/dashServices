@@ -3,7 +3,7 @@
  * Developer 		: Muathasim Mohamed P
  * Email			: muth4muathasim@gmail.com			
  * Date				: 06 June 2019
- * Modified Date	: 08 June 2019	
+ * Modified Date	: 09 June 2019	
  * Comments			: 
  */
 
@@ -61,9 +61,9 @@ public class JwtUtility {
         return jwt;
     }
 
-    public Long getIdFromJwt(String jwt) {
+    public String getUsernameFromJwt(String jwt) {
         Claims claims = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(jwt).getBody();
-        return Long.parseLong(claims.getSubject());
+        return claims.getSubject();
     }
 
     public boolean validateToken(String token) {

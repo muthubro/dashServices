@@ -3,7 +3,7 @@
  * Developer 		: Muathasim Mohamed P
  * Email			: muth4muathasim@gmail.com			
  * Date				: 06 June 2019
- * Modified Date	: 06 June 2019	
+ * Modified Date	: 09 June 2019	
  * Comments			: 
  */
 
@@ -30,15 +30,6 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Admin admin = adminRepository.findByUsername(username)
             .orElseThrow(() -> new UsernameNotFoundException("User not found with username " + username));
-        UserPrincipal userPrincipal = UserPrincipal.create(admin);
-
-        return userPrincipal;
-    }
-
-    // Used by JwtAuthenticationFilter
-    public UserDetails loadUserById(Long id) throws UsernameNotFoundException {
-        Admin admin = adminRepository.findById(id)
-            .orElseThrow(() -> new UsernameNotFoundException("User not found with id " + id));
         UserPrincipal userPrincipal = UserPrincipal.create(admin);
 
         return userPrincipal;

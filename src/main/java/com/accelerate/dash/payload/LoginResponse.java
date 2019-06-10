@@ -3,7 +3,7 @@
  * Developer 		: Muathasim Mohamed P
  * Email			: muth4muathasim@gmail.com			
  * Date				: 06 June 2019
- * Modified Date	: 06 June 2019	
+ * Modified Date	: 09 June 2019	
  * Comments			: 
  */
 
@@ -12,6 +12,7 @@ package com.accelerate.dash.payload;
 
 import com.accelerate.dash.service.StatusCodes;
 
+// Response to a login request
 public class LoginResponse extends ApiResponse {
 
     private String token;

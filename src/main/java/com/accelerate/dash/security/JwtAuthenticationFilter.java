@@ -3,7 +3,7 @@
  * Developer 		: Muathasim Mohamed P
  * Email			: muth4muathasim@gmail.com			
  * Date				: 06 June 2019
- * Modified Date	: 06 June 2019	
+ * Modified Date	: 09 June 2019	
  * Comments			: 
  */
 
@@ -48,9 +48,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             String jwt = getJwtFromRequest(request);
 
             if (StringUtils.hasText(jwt) && jwtUtility.validateToken(jwt)) {
-                Long id = jwtUtility.getIdFromJwt(jwt);
+                String username = jwtUtility.getUsernameFromJwt(jwt);
 
-                UserDetails userDetails = customUserDetailsService.loadUserById(id);
+                UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
