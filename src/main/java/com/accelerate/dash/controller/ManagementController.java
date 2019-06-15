@@ -10,9 +10,12 @@
 
 package com.accelerate.dash.controller;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import com.accelerate.dash.payload.ApiResponse;
+import com.accelerate.dash.payload.ApproveTeacherLogRequest;
 import com.accelerate.dash.payload.ErrorResponse;
 import com.accelerate.dash.payload.ModuleBatchMappingRequest;
 import com.accelerate.dash.payload.ModuleRequest;
@@ -23,6 +26,7 @@ import com.accelerate.dash.service.StatusCodes;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -57,5 +61,16 @@ public class ManagementController {
     public ApiResponse changeModuleStatus(@Valid @RequestBody ModuleStatusModifyRequest request, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) return new ErrorResponse(false, StatusCodes.INPUT_VALIDATION_ERROR, "Invalid request");
         return managementService.changeModuleStatus(request);
+    }
+
+    @PostMapping("/log/approve")
+    public ApiResponse approveLog(@Valid @RequestBody List<ApproveTeacherLogRequest> request, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) return new ErrorResponse(false, StatusCodes.INPUT_VALIDATION_ERROR, "Invalid request");
+        return managementService.approveLog(request);
+    }
+
+    @GetMapping("/log/get")
+    public ApiResponse getUnapprovedLog() {
+        return managementService.getUnapprovedLog();
     }
 }

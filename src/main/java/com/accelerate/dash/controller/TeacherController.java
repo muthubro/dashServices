@@ -34,6 +34,11 @@ public class TeacherController {
         return teacherService.logTime(batchId, moduleId, teacherCode, time);
     }
 
+    @GetMapping("/log/{teacherCode}")
+    public ApiResponse getLog(@PathVariable("teacherCode") String teacherCode) {
+        return teacherService.getLog(teacherCode);
+    }
+
     @GetMapping("/mark/{batchId}/{moduleId}/{teacherCode}")
     public ApiResponse markAsCompleted(@PathVariable("batchId") String batchId,
                                        @PathVariable("moduleId") String moduleId,

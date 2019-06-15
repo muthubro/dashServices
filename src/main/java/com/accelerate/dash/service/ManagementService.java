@@ -10,20 +10,27 @@
 
 package com.accelerate.dash.service;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import com.accelerate.dash.model.Module;
 import com.accelerate.dash.model.ModuleBatchMapping;
+import com.accelerate.dash.model.TeacherLog;
 import com.accelerate.dash.model.TimeUnit;
 import com.accelerate.dash.payload.ApiResponse;
+import com.accelerate.dash.payload.ApproveTeacherLogRequest;
 import com.accelerate.dash.payload.ErrorResponse;
 import com.accelerate.dash.payload.ModuleBatchMappingRequest;
 import com.accelerate.dash.payload.ModuleRequest;
 import com.accelerate.dash.payload.ModuleStatusModifyRequest;
 import com.accelerate.dash.payload.ModuleTimeRequest;
 import com.accelerate.dash.payload.SuccessResponse;
+import com.accelerate.dash.payload.TeacherLogResponse;
 import com.accelerate.dash.repository.ModuleBatchMappingRepository;
 import com.accelerate.dash.repository.ModuleRepository;
+import com.accelerate.dash.repository.TeacherLogRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,6 +43,9 @@ public class ManagementService {
 
     @Autowired
     private ModuleBatchMappingRepository moduleBatchMappingRepository;
+
+    @Autowired
+    private TeacherLogRepository teacherLogRepository;
 
     public ApiResponse addModule(ModuleRequest moduleRequest) {
         String unit = moduleRequest.getTimeUnit();
@@ -206,6 +216,73 @@ public class ManagementService {
         }
 
         return new SuccessResponse(true, StatusCodes.SUCCESS, "Module updated successfully.");
+    }
+
+    public ApiResponse approveLog(List<ApproveTeacherLogRequest> requests) {
+        for (ApproveTeacherLogRequest request : requests) {
+            String batchId = request.getBatchId();
+            String moduleId = request.getModuleId();
+            String teacherCode = request.getTeacherCode();
+            String date = request.getDate();
+
+            Module module = new Module();
+            try {
+                module = moduleRepository.findByModuleId(moduleId).orElseThrow(() -> new Exception());
+            } catch (Exception ex) {
+                return new ErrorResponse(false, StatusCodes.MISSING_VALUE, "Module not found.");
+            }
+
+            TeacherLog log = new TeacherLog();
+            try {
+                log = teacherLogRepository.findByTeacherCodeAndDateAndBatchIdAndModuleId(teacherCode, 
+                                                                                        date,
+                                                                                        batchId,
+                                                                                        moduleId)
+                                                                    .orElseThrow(() -> new Exception());
+            } catch (Exception ex) {
+                return new ErrorResponse(false, StatusCodes.MISSING_VALUE, "Log entry not found.");
+            }
+            int time = log.getTime();
+
+            log.setApproved(true);
+            try {
+                teacherLogRepository.save(log);
+            } catch (Exception ex) {
+                return new ErrorResponse(false, StatusCodes.INTERNAL_SERVER_ERROR, "Could not save log entry.");
+            }
+
+            List<ModuleBatchMapping> mappings = moduleBatchMappingRepository.findByModuleIdAndBatchIdAndTeacherCode(module.getId(), batchId, teacherCode);
+
+            if (mappings.isEmpty())
+                return new ErrorResponse(false, StatusCodes.MISSING_VALUE, "Mapping not found.");
+
+            ModuleBatchMapping lastMapping = getLastMapping(mappings);
+
+            if (lastMapping.getStatus() == 2)
+                return new ErrorResponse(false, StatusCodes.INPUT_VALIDATION_ERROR, "Module has already been completed.");
+
+            lastMapping.setProgress(lastMapping.getProgress() + time);
+
+            DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+            Date now = new Date();
+            String formattedDate = dateFormat.format(now);
+            if (lastMapping.getStartDate().isEmpty()) {
+                lastMapping.setStartDate(formattedDate);
+            }
+
+            try {
+                moduleBatchMappingRepository.save(lastMapping);
+            } catch (Exception ex) {
+                return new ErrorResponse(false, StatusCodes.INTERNAL_SERVER_ERROR, "Could not save module.");
+            }
+        }
+
+        return new SuccessResponse(true, StatusCodes.SUCCESS, "Logs approved successfully.");
+    }
+
+    public TeacherLogResponse getUnapprovedLog() {
+        List<TeacherLog> log = teacherLogRepository.findByIsApprovedFalse();
+        return new TeacherLogResponse(true, StatusCodes.SUCCESS, "Logs fetched successfully.", log);
     }
 
     private ModuleBatchMapping getLastMapping(List<ModuleBatchMapping> mappings) {
