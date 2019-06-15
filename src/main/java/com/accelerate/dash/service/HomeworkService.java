@@ -3,7 +3,7 @@
  * Developer 		: Muathasim Mohamed P
  * Email			: muth4muathasim@gmail.com			
  * Date				: 06 June 2019
- * Modified Date	: 06 June 2019	
+ * Modified Date	: 15 June 2019	
  * Comments			: 
  */
 
@@ -58,7 +58,7 @@ public class HomeworkService {
 
     private static final double MAX_FILE_SIZE = 1.0;
 
-    private static final String HOMEWORK_DIR = "D:\\Work\\Dash\\dashServices\\dash\\src\\main\\resources\\homework";
+    private static final String HOMEWORK_DIR = "D:\\Work\\Dash\\dashServices\\src\\main\\resources\\homework";
 
 	@Autowired
 	private HomeworkRepository homeworkRepository;
@@ -138,7 +138,12 @@ public class HomeworkService {
 
         date = utilities.convertDateToDatestamp(date);
         Homework homework = new Homework(fileName, date);
-        homework = homeworkRepository.save(homework);
+
+        try {
+            homework = homeworkRepository.save(homework);
+        } catch (Exception ex) {
+            return new ErrorResponse(false, StatusCodes.INTERNAL_SERVER_ERROR, "Could not save homework.");
+        }
 
         // Save file with filename as the file ID
         Path path = Paths.get(HOMEWORK_DIR, homework.getId() + "." + ext);
@@ -168,7 +173,12 @@ public class HomeworkService {
         } catch (Exception ex) {
             return new ErrorResponse(false, StatusCodes.INTERNAL_SERVER_ERROR, "Could not delete file.");
         }
-        homeworkRepository.delete(homework);
+
+        try {
+            homeworkRepository.delete(homework);
+        } catch (Exception ex) {
+            return new ErrorResponse(false, StatusCodes.INTERNAL_SERVER_ERROR, "Could not delete homework.");
+        }
 
         return new SuccessResponse(true, StatusCodes.SUCCESS, "Homework deleted successfully.");
     }

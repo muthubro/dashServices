@@ -3,7 +3,7 @@
  * Developer 		: Muathasim Mohamed P
  * Email			: muth4muathasim@gmail.com			
  * Date				: 06 June 2019
- * Modified Date	: 08 June 2019	
+ * Modified Date	: 15 June 2019	
  * Comments			: 
  */
 
@@ -78,7 +78,12 @@ public class AuthService {
 
         Admin admin = new Admin(name, username, passwordEncoder.encode("password"));
         admin.setRole(role);
-        adminRepository.save(admin);
+
+        try {
+            adminRepository.save(admin);
+        } catch (Exception ex) {
+            return new ErrorResponse(false, StatusCodes.INTERNAL_SERVER_ERROR, "Could not save user.");
+        }
         
         return new SuccessResponse(true, StatusCodes.SUCCESS, "Signup successful");
     }

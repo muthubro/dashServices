@@ -3,7 +3,7 @@
  * Developer 		: Muathasim Mohamed P
  * Email			: muth4muathasim@gmail.com			
  * Date				: 09 June 2019
- * Modified Date	: 09 June 2019	
+ * Modified Date	: 15 June 2019	
  * Comments			: 
  */
 
@@ -71,7 +71,11 @@ public class PollService {
             poll.addQuestion(q);
         });
 
-        pollRepository.save(poll);
+        try {
+            pollRepository.save(poll);
+        } catch (Exception ex) {
+            return new ErrorResponse(false, StatusCodes.INTERNAL_SERVER_ERROR, "Could not save poll.");
+        }
 
         return new SuccessResponse(true, StatusCodes.SUCCESS, "Poll created successfully.");
     }

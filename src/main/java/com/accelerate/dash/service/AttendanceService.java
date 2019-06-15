@@ -3,7 +3,7 @@
  * Developer 		: Muathasim Mohamed P
  * Email			: muth4muathasim@gmail.com			
  * Date				: 06 June 2019
- * Modified Date	: 06 June 2019	
+ * Modified Date	: 15 June 2019	
  * Comments			: 
  */
 
@@ -187,7 +187,12 @@ public class AttendanceService {
 			}
 
 			attendance.setDate(date);
-			attendanceRepository.save(attendance);
+
+			try {
+				attendanceRepository.save(attendance);
+			} catch (Exception ex) {
+				return new ErrorResponse(false, StatusCodes.INTERNAL_SERVER_ERROR, "Could not save attendance.");
+			}
 		}
 		return new SuccessResponse(true, StatusCodes.SUCCESS, "Attendance confirmed");
 	}
