@@ -3,7 +3,7 @@
  * Developer 		: Muathasim Mohamed P
  * Email			: muth4muathasim@gmail.com			
  * Date				: 06 June 2019
- * Modified Date	: 06 June 2019	
+ * Modified Date	: 17 June 2019	
  * Comments			: 
  */
 
@@ -61,5 +61,13 @@ public class Attendance {
 
 	public void setLeaveStatus(int leaveStatus) {
 		this.leaveStatus = leaveStatus;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 }

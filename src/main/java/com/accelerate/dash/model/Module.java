@@ -3,7 +3,7 @@
  * Developer 		: Muathasim Mohamed P
  * Email			: muth4muathasim@gmail.com			
  * Date				: 15 June 2019
- * Modified Date	: 15 June 2019	
+ * Modified Date	: 17 June 2019	
  * Comments			: 
  */
 
@@ -36,22 +36,22 @@ public class Module {
     private String moduleName;
 
     @Column(name = "time_alloted")
-    private int timeAllotted;
+    private Double timeAllotted;
 
     @Column(name = "maximum_tolerance")
-    private int maximumTolerance;
+    private Double maximumTolerance;
 
     @Column(name = "time_unit")
-    private int timeUnit;
+    private String timeUnit;
 
     public Module() {}
 
-	public Module(String moduleId, String moduleName, int timeAllotted, int maximumTolerance, TimeUnit timeUnit) {
+	public Module(String moduleId, String moduleName, Double timeAllotted, Double maximumTolerance, String timeUnit) {
 		this.moduleId = moduleId;
 		this.moduleName = moduleName;
 		this.timeAllotted = timeAllotted;
         this.maximumTolerance = maximumTolerance;
-        this.timeUnit = timeUnit.getValue();
+        this.timeUnit = timeUnit;
 	}
 
     public Long getId() {
@@ -78,27 +78,27 @@ public class Module {
         this.moduleName = moduleName;
     }
 
-    public int getTimeAllotted() {
+    public Double getTimeAllotted() {
         return timeAllotted;
     }
 
-    public void setTimeAllotted(int timeAllotted) {
+    public void setTimeAllotted(Double timeAllotted) {
         this.timeAllotted = timeAllotted;
     }
 
-    public int getMaximumTolerance() {
+    public Double getMaximumTolerance() {
         return maximumTolerance;
     }
 
-    public void setMaximumTolerance(int maximumTolerance) {
+    public void setMaximumTolerance(Double maximumTolerance) {
         this.maximumTolerance = maximumTolerance;
     }
 
-    public int getTimeUnit() {
+    public String getTimeUnit() {
         return timeUnit;
     }
 
-    public void setTimeUnit(int timeUnit) {
+    public void setTimeUnit(String timeUnit) {
         this.timeUnit = timeUnit;
     }
 }

@@ -3,7 +3,7 @@
  * Developer 		: Muathasim Mohamed P
  * Email			: muth4muathasim@gmail.com			
  * Date				: 15 June 2019
- * Modified Date	: 15 June 2019	
+ * Modified Date	: 17 June 2019	
  * Comments			: 
  */
 
@@ -58,9 +58,9 @@ public class ManagementController {
     }
 
     @PostMapping("/module/edit")
-    public ApiResponse changeModuleStatus(@Valid @RequestBody ModuleStatusModifyRequest request, BindingResult bindingResult) {
+    public ApiResponse updateModuleMapping(@Valid @RequestBody ModuleStatusModifyRequest request, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) return new ErrorResponse(false, StatusCodes.INPUT_VALIDATION_ERROR, "Invalid request");
-        return managementService.changeModuleStatus(request);
+        return managementService.updateModuleMapping(request);
     }
 
     @PostMapping("/log/approve")

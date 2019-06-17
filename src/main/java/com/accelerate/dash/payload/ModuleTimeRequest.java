@@ -3,7 +3,7 @@
  * Developer 		: Muathasim Mohamed P
  * Email			: muth4muathasim@gmail.com			
  * Date				: 15 June 2019
- * Modified Date	: 15 June 2019	
+ * Modified Date	: 17 June 2019	
  * Comments			: 
  */
 
@@ -20,17 +20,17 @@ public class ModuleTimeRequest {
     private String moduleId;
 
     @NotNull
-    private Integer timeAllotted;
+    private Double timeAllotted;
 
     @NotNull
-    private Integer maximumTolerance;
+    private Double maximumTolerance;
 
     @NotBlank
     private String timeUnit;
 
     public ModuleTimeRequest() {}
 
-    public ModuleTimeRequest(String moduleId, Integer timeAllotted, Integer maximumTolerance, String timeUnit) {
+    public ModuleTimeRequest(String moduleId, Double timeAllotted, Double maximumTolerance, String timeUnit) {
         this.moduleId = moduleId;
         this.timeAllotted = timeAllotted;
         this.maximumTolerance = maximumTolerance;
@@ -45,19 +45,19 @@ public class ModuleTimeRequest {
         this.moduleId = moduleId;
     }
 
-    public Integer getTimeAllotted() {
+    public Double getTimeAllotted() {
         return timeAllotted;
     }
 
-    public void setTimeAllotted(Integer timeAllotted) {
+    public void setTimeAllotted(Double timeAllotted) {
         this.timeAllotted = timeAllotted;
     }
 
-    public Integer getMaximumTolerance() {
+    public Double getMaximumTolerance() {
         return maximumTolerance;
     }
 
-    public void setMaximumTolerance(Integer maximumTolerance) {
+    public void setMaximumTolerance(Double maximumTolerance) {
         this.maximumTolerance = maximumTolerance;
     }
 

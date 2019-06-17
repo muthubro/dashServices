@@ -3,7 +3,7 @@
  * Developer 		: Muathasim Mohamed P
  * Email			: muth4muathasim@gmail.com			
  * Date				: 15 June 2019
- * Modified Date	: 15 June 2019	
+ * Modified Date	: 17 June 2019	
  * Comments			: 
  */
 
@@ -11,62 +11,52 @@
 package com.accelerate.dash.payload;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 // Request format to modify module status
 public class ModuleStatusModifyRequest {
 
-    @NotBlank
-    private String moduleId;
+    @NotNull
+    private Long entryId;
 
-    @NotBlank
-    private String batchId;
+    private Double maxTime;
 
-    Integer maxTime;
+    private Double tolerance;
 
-    Integer tolerance;
+    private String repeatTitle;
 
-    Integer status;
+    private String comments;
+
+    private Integer status;
+
+    private Boolean isFrozen;
 
     public ModuleStatusModifyRequest() {}
 
-    public ModuleStatusModifyRequest(@NotBlank String moduleId, @NotBlank String batchId, Integer maxTime,
-            Integer tolerance, Integer status) {
-        this.moduleId = moduleId;
-        this.batchId = batchId;
+    public ModuleStatusModifyRequest(@NotBlank Long entryId, Double maxTime, Double tolerance, String repeatTitle,
+            String comments, Integer status, Boolean isFrozen) {
+        this.entryId = entryId;
         this.maxTime = maxTime;
         this.tolerance = tolerance;
+        this.repeatTitle = repeatTitle;
+        this.comments = comments;
         this.status = status;
+        this.isFrozen = isFrozen;
     }
 
-    public String getModuleId() {
-        return moduleId;
-    }
-
-    public void setModuleId(String moduleId) {
-        this.moduleId = moduleId;
-    }
-
-    public String getBatchId() {
-        return batchId;
-    }
-
-    public void setBatchId(String batchId) {
-        this.batchId = batchId;
-    }
-
-    public Integer getMaxTime() {
+    public Double getMaxTime() {
         return maxTime;
     }
 
-    public void setMaxTime(Integer maxTime) {
+    public void setMaxTime(Double maxTime) {
         this.maxTime = maxTime;
     }
 
-    public Integer getTolerance() {
+    public Double getTolerance() {
         return tolerance;
     }
 
-    public void setTolerance(Integer tolerance) {
+    public void setTolerance(Double tolerance) {
         this.tolerance = tolerance;
     }
 
@@ -76,5 +66,37 @@ public class ModuleStatusModifyRequest {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+	public Long getEntryId() {
+		return entryId;
+	}
+
+	public void setEntryId(Long entryId) {
+		this.entryId = entryId;
+	}
+
+    public String getRepeatTitle() {
+        return repeatTitle;
+    }
+
+    public void setRepeatTitle(String repeatTitle) {
+        this.repeatTitle = repeatTitle;
+    }
+
+    public String getComments() {
+        return comments;
+    }
+
+    public void setComments(String comments) {
+        this.comments = comments;
+    }
+
+    public Boolean getIsFrozen() {
+        return isFrozen;
+    }
+
+    public void setIsFrozen(Boolean isFrozen) {
+        this.isFrozen = isFrozen;
     }
 }

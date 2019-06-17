@@ -3,7 +3,7 @@
  * Developer 		: Muathasim Mohamed P
  * Email			: muth4muathasim@gmail.com			
  * Date				: 06 June 2019
- * Modified Date	: 06 June 2019	
+ * Modified Date	: 16 June 2019	
  * Comments			: 
  */
 
@@ -11,6 +11,7 @@
 package com.accelerate.dash.controller;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +23,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.accelerate.dash.model.Attendance;
 import com.accelerate.dash.payload.ApiResponse;
-import com.accelerate.dash.payload.AttendanceConfirmationRequest;
 import com.accelerate.dash.service.AttendanceService;
 
 @RestController
@@ -46,7 +47,7 @@ public class AttendanceController {
 	}
 
 	@PostMapping("/confirm")
-	public ApiResponse confirmAttendance(@RequestBody AttendanceConfirmationRequest request) {
-		return attendanceService.confirmAttendance(request.getData());
+	public ApiResponse confirmAttendance(@RequestBody List<Attendance> request) {
+		return attendanceService.confirmAttendance(request);
 	}
 }

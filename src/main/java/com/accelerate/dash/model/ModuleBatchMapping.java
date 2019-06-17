@@ -3,7 +3,7 @@
  * Developer 		: Muathasim Mohamed P
  * Email			: muth4muathasim@gmail.com			
  * Date				: 15 June 2019
- * Modified Date	: 15 June 2019	
+ * Modified Date	: 17 June 2019	
  * Comments			: 
  */
 
@@ -37,16 +37,25 @@ public class ModuleBatchMapping {
     private String batchId;
 
     @NotNull
-    private Integer maxTime;
+    private Double maxTime;
 
     @NotNull
-    private Integer tolerance;
+    private Double tolerance;
 
     @NotBlank
     private String teacherCode;
 
+    @NotBlank
+    private String dateOfCreation;
+
+    @NotBlank
+    private String adminCode;
+
+    @Column(name = "repeat_title")
+    private String repeatTitle;
+
     @Column(name = "comments")
-    private String comments = "";
+    private String comments;
 
     @Column(name = "start_date")
     private String startDate = "";
@@ -55,10 +64,19 @@ public class ModuleBatchMapping {
     private String endDate = "";
 
     @Column(name = "progress")
-    private Integer progress = 0;
+    private Double progress = 0.0;
+
+    @Column(name = "logged_sessions_count")
+    private Integer loggedSessionsCount = 0;
+
+    @Column(name = "rating")
+    private Double rating = 0.0;
 
     @Column(name = "status")
     private Integer status = 0;
+
+    @Column(name = "is_frozen")
+    private Boolean isFrozen = false;
 
     @Column(name = "is_complete_acknowledged")
     private boolean isCompleteAcknowledged = false;
@@ -71,31 +89,46 @@ public class ModuleBatchMapping {
 
     public ModuleBatchMapping() {}
 
-    public ModuleBatchMapping(Module module, String batchId, Integer maxTime,
-            Integer tolerance, String teacherCode, String comments, String startDate, String endDate,
-            Integer progress, Integer status, boolean isCompleteAcknowledged, Integer partIndex, Integer repeats) {
+    public ModuleBatchMapping(Module module, String batchId, Double maxTime,
+            Double tolerance, String teacherCode, String dateOfCreation,
+            String adminCode, String repeatTitle, String comments, String startDate, String endDate,
+            Double progress, Integer loggedSessionsCount, Double rating, Integer status, Boolean isFrozen,
+            boolean isCompleteAcknowledged, Integer partIndex, Integer repeats) {
         this.module = module;
         this.batchId = batchId;
         this.maxTime = maxTime;
         this.tolerance = tolerance;
         this.teacherCode = teacherCode;
+        this.dateOfCreation = dateOfCreation;
+        this.adminCode = adminCode;
+        this.repeatTitle = repeatTitle;
         this.comments = comments;
         this.startDate = startDate;
         this.endDate = endDate;
         this.progress = progress;
+        this.loggedSessionsCount = loggedSessionsCount;
+        this.rating = rating;
         this.status = status;
+        this.isFrozen = isFrozen;
         this.isCompleteAcknowledged = isCompleteAcknowledged;
         this.partIndex = partIndex;
         this.repeats = repeats;
     }
 
-    public ModuleBatchMapping(Module module, @NotBlank String batchId, @NotNull Integer maxTime,
-            @NotNull Integer tolerance, @NotBlank String teacherCode, Integer partIndex, Integer repeats) {
+    
+
+    public ModuleBatchMapping(Module module, String batchId, Double maxTime,
+            Double tolerance, String teacherCode, String dateOfCreation, String adminCode,
+            String repeatTitle, String comments, Integer partIndex, Integer repeats) {
         this.module = module;
         this.batchId = batchId;
         this.maxTime = maxTime;
         this.tolerance = tolerance;
         this.teacherCode = teacherCode;
+        this.dateOfCreation = dateOfCreation;
+        this.adminCode = adminCode;
+        this.repeatTitle = repeatTitle;
+        this.comments = comments;
         this.partIndex = partIndex;
         this.repeats = repeats;
     }
@@ -124,19 +157,19 @@ public class ModuleBatchMapping {
         this.batchId = batchId;
     }
 
-    public Integer getMaxTime() {
+    public Double getMaxTime() {
         return maxTime;
     }
 
-    public void setMaxTime(Integer maxTime) {
+    public void setMaxTime(Double maxTime) {
         this.maxTime = maxTime;
     }
 
-    public Integer getTolerance() {
+    public Double getTolerance() {
         return tolerance;
     }
 
-    public void setTolerance(Integer tolerance) {
+    public void setTolerance(Double tolerance) {
         this.tolerance = tolerance;
     }
 
@@ -172,12 +205,16 @@ public class ModuleBatchMapping {
         this.endDate = endDate;
     }
 
-    public Integer getProgress() {
+    public Double getProgress() {
         return progress;
     }
 
-    public void setProgress(Integer progress) {
+    public void setProgress(Double progress) {
         this.progress = progress;
+    }
+
+    public void addProgress(Double duration) {
+        progress += duration;
     }
 
     public Integer getStatus() {
@@ -210,5 +247,53 @@ public class ModuleBatchMapping {
 
     public void setRepeats(Integer repeats) {
         this.repeats = repeats;
+    }
+
+    public String getDateOfCreation() {
+        return dateOfCreation;
+    }
+
+    public void setDateOfCreation(String dateOfCreation) {
+        this.dateOfCreation = dateOfCreation;
+    }
+
+    public String getAdminCode() {
+        return adminCode;
+    }
+
+    public void setAdminCode(String adminCode) {
+        this.adminCode = adminCode;
+    }
+
+    public String getRepeatTitle() {
+        return repeatTitle;
+    }
+
+    public void setRepeatTitle(String repeatTitle) {
+        this.repeatTitle = repeatTitle;
+    }
+
+    public Integer getLoggedSessionsCount() {
+        return loggedSessionsCount;
+    }
+
+    public void setLoggedSessionsCount(Integer loggedSessionsCount) {
+        this.loggedSessionsCount = loggedSessionsCount;
+    }
+
+    public Double getRating() {
+        return rating;
+    }
+
+    public void setRating(Double rating) {
+        this.rating = rating;
+    }
+
+    public Boolean getIsFrozen() {
+        return isFrozen;
+    }
+
+    public void setIsFrozen(Boolean isFrozen) {
+        this.isFrozen = isFrozen;
     }
 }

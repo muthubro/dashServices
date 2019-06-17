@@ -3,7 +3,7 @@
  * Developer 		: Muathasim Mohamed P
  * Email			: muth4muathasim@gmail.com			
  * Date				: 15 June 2019
- * Modified Date	: 15 June 2019	
+ * Modified Date	: 17 June 2019	
  * Comments			: 
  */
 
@@ -11,7 +11,6 @@
 package com.accelerate.dash.repository;
 
 import java.util.List;
-import java.util.Optional;
 
 import com.accelerate.dash.model.TeacherLog;
 
@@ -22,8 +21,8 @@ import org.springframework.stereotype.Repository;
 public interface TeacherLogRepository extends JpaRepository<TeacherLog, Long> {
 
     public List<TeacherLog> findByTeacherCode(String teacherCode);
-
-    public Optional<TeacherLog> findByTeacherCodeAndDateAndBatchIdAndModuleId(String teacherCode, String date, String batchId, String moduleId);
+    
+    public List<TeacherLog> findByIdIn(List<Long> ids);
 
     public List<TeacherLog> findByIsApprovedFalse();
 }

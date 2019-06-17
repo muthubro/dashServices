@@ -3,7 +3,7 @@
  * Developer 		: Muathasim Mohamed P
  * Email			: muth4muathasim@gmail.com			
  * Date				: 15 June 2019
- * Modified Date	: 15 June 2019	
+ * Modified Date	: 17 June 2019	
  * Comments			: 
  */
 
@@ -24,18 +24,28 @@ public class ModuleBatchMappingRequest {
     @NotBlank
     private String teacherCode;
 
-    private Boolean repeat;
+    @NotBlank
+    private String adminCode;
 
-    Integer maxTime;
+    private String repeatTitle;
 
-    Integer tolerance;
+    private String comments;
 
-    public ModuleBatchMappingRequest(String moduleId, String batchId, String teacherCode, Boolean repeat, Integer maxTime,
-            Integer tolerance) {
+    private Boolean isRepeat;
+
+    private Double maxTime = -1.0;
+
+    private Double tolerance = -1.0;
+
+    public ModuleBatchMappingRequest(String moduleId, String batchId, String teacherCode, String adminCode, Boolean isRepeat, 
+            String repeatTitle, String comments, Double maxTime, Double tolerance) {
         this.moduleId = moduleId;
         this.batchId = batchId;
         this.teacherCode = teacherCode;
-        this.repeat = repeat;
+        this.adminCode = adminCode;
+        this.repeatTitle = repeatTitle;
+        this.comments = comments;
+        this.isRepeat = isRepeat;
         this.maxTime = maxTime;
         this.tolerance = tolerance;
     }
@@ -56,28 +66,20 @@ public class ModuleBatchMappingRequest {
         this.batchId = batchId;
     }
 
-    public Integer getMaxTime() {
+    public Double getMaxTime() {
         return maxTime;
     }
 
-    public void setMaxTime(Integer maxTime) {
+    public void setMaxTime(Double maxTime) {
         this.maxTime = maxTime;
     }
 
-    public Integer getTolerance() {
+    public Double getTolerance() {
         return tolerance;
     }
 
-    public void setTolerance(Integer tolerance) {
+    public void setTolerance(Double tolerance) {
         this.tolerance = tolerance;
-    }
-
-    public Boolean isRepeat() {
-        return repeat;
-    }
-
-    public void setRepeat(Boolean repeat) {
-        this.repeat = repeat;
     }
 
     public String getTeacherCode() {
@@ -86,5 +88,37 @@ public class ModuleBatchMappingRequest {
 
     public void setTeacherCode(String teacherCode) {
         this.teacherCode = teacherCode;
+    }
+
+    public String getAdminCode() {
+        return adminCode;
+    }
+
+    public void setAdminCode(String adminCode) {
+        this.adminCode = adminCode;
+    }
+
+    public String getRepeatTitle() {
+        return repeatTitle;
+    }
+
+    public void setRepeatTitle(String repeatTitle) {
+        this.repeatTitle = repeatTitle;
+    }
+
+    public String getComments() {
+        return comments;
+    }
+
+    public void setComments(String comments) {
+        this.comments = comments;
+    }
+
+    public Boolean getIsRepeat() {
+        return isRepeat;
+    }
+
+    public void setIsRepeat(Boolean isRepeat) {
+        this.isRepeat = isRepeat;
     }
 }

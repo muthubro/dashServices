@@ -3,13 +3,16 @@
  * Developer 		: Muathasim Mohamed P
  * Email			: muth4muathasim@gmail.com			
  * Date				: 06 June 2019
- * Modified Date	: 06 June 2019	
+ * Modified Date	: 17 June 2019	
  * Comments			: 
  */
 
 
 package com.accelerate.dash.utility;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -33,6 +36,14 @@ public class MiscUtilities {
         if (!matcher.find()) return null;
         datestamp = matcher.group(3) + "-" + matcher.group(2) + "-" + matcher.group(1);
         return datestamp;
+    }
+
+    public String getCurrentDatestamp() {
+        DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+        Date now = new Date();
+        String date = dateFormat.format(now);
+
+        return date;
     }
 
     public double bytesToMB(long bytes) {

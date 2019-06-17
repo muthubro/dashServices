@@ -3,7 +3,7 @@
  * Developer 		: Muathasim Mohamed P
  * Email			: muth4muathasim@gmail.com			
  * Date				: 06 June 2019
- * Modified Date	: 15 June 2019	
+ * Modified Date	: 17 June 2019	
  * Comments			: 
  */
 
@@ -188,6 +188,10 @@ public class AttendanceService {
 
 			attendance.setDate(date);
 
+			Optional<Attendance> temp = attendanceRepository.findByRegNoAndDate(attendance.getRegNo(), date);
+			if (temp.isPresent()) 
+				attendance.setId(temp.get().getId());
+			
 			try {
 				attendanceRepository.save(attendance);
 			} catch (Exception ex) {
