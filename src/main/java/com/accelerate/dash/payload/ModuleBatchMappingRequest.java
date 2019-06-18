@@ -3,7 +3,7 @@
  * Developer 		: Muathasim Mohamed P
  * Email			: muth4muathasim@gmail.com			
  * Date				: 15 June 2019
- * Modified Date	: 17 June 2019	
+ * Modified Date	: 18 June 2019	
  * Comments			: 
  */
 
@@ -27,22 +27,28 @@ public class ModuleBatchMappingRequest {
     @NotBlank
     private String adminCode;
 
+    private String lastCompletionDate;
+
+    private Integer maxAllowedGap;
+
     private String repeatTitle;
 
     private String comments;
 
     private Boolean isRepeat;
 
-    private Double maxTime = -1.0;
+    private Double maxTime;
 
-    private Double tolerance = -1.0;
+    private Double tolerance;
 
     public ModuleBatchMappingRequest(String moduleId, String batchId, String teacherCode, String adminCode, Boolean isRepeat, 
-            String repeatTitle, String comments, Double maxTime, Double tolerance) {
+            String lastCompletionDate, Integer maxAllowedGap, String repeatTitle, String comments, Double maxTime, Double tolerance) {
         this.moduleId = moduleId;
         this.batchId = batchId;
         this.teacherCode = teacherCode;
         this.adminCode = adminCode;
+        this.lastCompletionDate = lastCompletionDate;
+        this.maxAllowedGap = maxAllowedGap;
         this.repeatTitle = repeatTitle;
         this.comments = comments;
         this.isRepeat = isRepeat;
@@ -120,5 +126,21 @@ public class ModuleBatchMappingRequest {
 
     public void setIsRepeat(Boolean isRepeat) {
         this.isRepeat = isRepeat;
+    }
+
+    public String getLastCompletionDate() {
+        return lastCompletionDate;
+    }
+
+    public void setLastCompletionDate(String lastCompletionDate) {
+        this.lastCompletionDate = lastCompletionDate;
+    }
+
+    public Integer getMaxAllowedGap() {
+        return maxAllowedGap;
+    }
+
+    public void setMaxAllowedGap(Integer maxAllowedGap) {
+        this.maxAllowedGap = maxAllowedGap;
     }
 }

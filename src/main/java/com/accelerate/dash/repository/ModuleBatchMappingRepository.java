@@ -3,7 +3,7 @@
  * Developer 		: Muathasim Mohamed P
  * Email			: muth4muathasim@gmail.com			
  * Date				: 15 June 2019
- * Modified Date	: 17 June 2019	
+ * Modified Date	: 18 June 2019	
  * Comments			: 
  */
 
@@ -22,6 +22,8 @@ import org.springframework.stereotype.Repository;
 public interface ModuleBatchMappingRepository extends JpaRepository<ModuleBatchMapping, Long> {
 
     Optional<ModuleBatchMapping> findById(Long id);
+
+    List<ModuleBatchMapping> findByBatchIdIn(List<String> batchId);
 
     List<ModuleBatchMapping> findByModuleIdAndBatchIdOrderByPartIndexDesc(Long moduleId, String batchId);
 

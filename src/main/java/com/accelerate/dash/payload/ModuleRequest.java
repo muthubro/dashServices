@@ -3,7 +3,7 @@
  * Developer 		: Muathasim Mohamed P
  * Email			: muth4muathasim@gmail.com			
  * Date				: 15 June 2019
- * Modified Date	: 17 June 2019	
+ * Modified Date	: 18 June 2019	
  * Comments			: 
  */
 
@@ -27,14 +27,21 @@ public class ModuleRequest {
 
     private String timeUnit;
 
+    private String lastCompletionDate;
+
+    private Integer maxAllowedGap;
+
     public ModuleRequest() {}
 
-    public ModuleRequest(String moduleId, String moduleName, Double timeAllotted, Double maximumTolerance, String timeUnit) {
+    public ModuleRequest(String moduleId, String moduleName, Double timeAllotted, Double maximumTolerance, String timeUnit,
+            String lastCompletionDate, Integer maxAllowedGap) {
         this.moduleId = moduleId;
         this.moduleName = moduleName;
         this.timeAllotted = timeAllotted;
         this.maximumTolerance = maximumTolerance;
         this.timeUnit = timeUnit;
+        this.lastCompletionDate = lastCompletionDate;
+        this.maxAllowedGap = maxAllowedGap;
     }
 
     public String getModuleId() {
@@ -75,5 +82,21 @@ public class ModuleRequest {
 
     public void setModuleName(String moduleName) {
         this.moduleName = moduleName;
+    }
+
+    public String getLastCompletionDate() {
+        return lastCompletionDate;
+    }
+
+    public void setLastCompletionDate(String lastCompletionDate) {
+        this.lastCompletionDate = lastCompletionDate;
+    }
+
+    public Integer getMaxAllowedGap() {
+        return maxAllowedGap;
+    }
+
+    public void setMaxAllowedGap(Integer maxAllowedGap) {
+        this.maxAllowedGap = maxAllowedGap;
     }
 }

@@ -3,7 +3,7 @@
  * Developer 		: Muathasim Mohamed P
  * Email			: muth4muathasim@gmail.com			
  * Date				: 15 June 2019
- * Modified Date	: 17 June 2019	
+ * Modified Date	: 18 June 2019	
  * Comments			: 
  */
 
@@ -51,6 +51,12 @@ public class ModuleBatchMapping {
     @NotBlank
     private String adminCode;
 
+    @Column(name = "last_completion_date")
+    private String lastCompletionDate;
+
+    @Column(name = "max_allowed_gap")
+    private Integer maxAllowedGap;
+
     @Column(name = "repeat_title")
     private String repeatTitle;
 
@@ -91,7 +97,8 @@ public class ModuleBatchMapping {
 
     public ModuleBatchMapping(Module module, String batchId, Double maxTime,
             Double tolerance, String teacherCode, String dateOfCreation,
-            String adminCode, String repeatTitle, String comments, String startDate, String endDate,
+            String adminCode, String lastCompletionDate, Integer maxAllowedGap, 
+            String repeatTitle, String comments, String startDate, String endDate,
             Double progress, Integer loggedSessionsCount, Double rating, Integer status, Boolean isFrozen,
             boolean isCompleteAcknowledged, Integer partIndex, Integer repeats) {
         this.module = module;
@@ -101,6 +108,8 @@ public class ModuleBatchMapping {
         this.teacherCode = teacherCode;
         this.dateOfCreation = dateOfCreation;
         this.adminCode = adminCode;
+        this.lastCompletionDate = lastCompletionDate;
+        this.maxAllowedGap = maxAllowedGap;
         this.repeatTitle = repeatTitle;
         this.comments = comments;
         this.startDate = startDate;
@@ -119,7 +128,8 @@ public class ModuleBatchMapping {
 
     public ModuleBatchMapping(Module module, String batchId, Double maxTime,
             Double tolerance, String teacherCode, String dateOfCreation, String adminCode,
-            String repeatTitle, String comments, Integer partIndex, Integer repeats) {
+            String lastCompletionDate, Integer maxAllowedGap, String repeatTitle, 
+            String comments, Integer partIndex, Integer repeats) {
         this.module = module;
         this.batchId = batchId;
         this.maxTime = maxTime;
@@ -127,6 +137,8 @@ public class ModuleBatchMapping {
         this.teacherCode = teacherCode;
         this.dateOfCreation = dateOfCreation;
         this.adminCode = adminCode;
+        this.lastCompletionDate = lastCompletionDate;
+        this.maxAllowedGap = maxAllowedGap;
         this.repeatTitle = repeatTitle;
         this.comments = comments;
         this.partIndex = partIndex;
@@ -281,6 +293,10 @@ public class ModuleBatchMapping {
         this.loggedSessionsCount = loggedSessionsCount;
     }
 
+    public void incrementLoggedSessionsCount() {
+        loggedSessionsCount++;
+    }
+
     public Double getRating() {
         return rating;
     }
@@ -295,5 +311,21 @@ public class ModuleBatchMapping {
 
     public void setIsFrozen(Boolean isFrozen) {
         this.isFrozen = isFrozen;
+    }
+
+    public String getLastCompletionDate() {
+        return lastCompletionDate;
+    }
+
+    public void setLastCompletionDate(String lastCompletionDate) {
+        this.lastCompletionDate = lastCompletionDate;
+    }
+
+    public Integer getMaxAllowedGap() {
+        return maxAllowedGap;
+    }
+
+    public void setMaxAllowedGap(Integer maxAllowedGap) {
+        this.maxAllowedGap = maxAllowedGap;
     }
 }

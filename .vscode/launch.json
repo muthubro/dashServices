@@ -19,12 +19,6 @@
         },
         {
             "type": "java",
-            "name": "Debug (Launch)-RegistrationNumber",
-            "request": "launch",
-            "mainClass": "RegistrationNumber"
-        },
-        {
-            "type": "java",
             "name": "Spring Boot-DashApplication<dash>",
             "request": "launch",
             "cwd": "${workspaceFolder}",

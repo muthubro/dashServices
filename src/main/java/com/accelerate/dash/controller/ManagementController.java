@@ -3,7 +3,7 @@
  * Developer 		: Muathasim Mohamed P
  * Email			: muth4muathasim@gmail.com			
  * Date				: 15 June 2019
- * Modified Date	: 17 June 2019	
+ * Modified Date	: 18 June 2019	
  * Comments			: 
  */
 
@@ -18,6 +18,7 @@ import com.accelerate.dash.payload.ApiResponse;
 import com.accelerate.dash.payload.ApproveTeacherLogRequest;
 import com.accelerate.dash.payload.ErrorResponse;
 import com.accelerate.dash.payload.ModuleBatchMappingRequest;
+import com.accelerate.dash.payload.ModuleMappingRequest;
 import com.accelerate.dash.payload.ModuleRequest;
 import com.accelerate.dash.payload.ModuleStatusModifyRequest;
 import com.accelerate.dash.payload.ModuleTimeRequest;
@@ -72,5 +73,11 @@ public class ManagementController {
     @GetMapping("/log/get")
     public ApiResponse getUnapprovedLog() {
         return managementService.getUnapprovedLog();
+    }
+
+    @PostMapping("/module/view")
+    public ApiResponse viewModuleSchedule(@Valid @RequestBody ModuleMappingRequest request, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) return new ErrorResponse(false, StatusCodes.INPUT_VALIDATION_ERROR, "Invalid request");
+        return managementService.viewModuleSchedule(request);
     }
 }

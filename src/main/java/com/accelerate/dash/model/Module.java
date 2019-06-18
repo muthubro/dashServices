@@ -3,7 +3,7 @@
  * Developer 		: Muathasim Mohamed P
  * Email			: muth4muathasim@gmail.com			
  * Date				: 15 June 2019
- * Modified Date	: 17 June 2019	
+ * Modified Date	: 18 June 2019	
  * Comments			: 
  */
 
@@ -44,14 +44,23 @@ public class Module {
     @Column(name = "time_unit")
     private String timeUnit;
 
+    @Column(name = "last_completion_date")
+    private String lastCompletionDate;
+
+    @Column(name = "max_allowed_gap")
+    private Integer maxAllowedGap;
+
     public Module() {}
 
-	public Module(String moduleId, String moduleName, Double timeAllotted, Double maximumTolerance, String timeUnit) {
+    public Module(String moduleId, String moduleName, Double timeAllotted, Double maximumTolerance, String timeUnit,
+            String lastCompletionDate, Integer maxAllowedGap) {
 		this.moduleId = moduleId;
 		this.moduleName = moduleName;
 		this.timeAllotted = timeAllotted;
         this.maximumTolerance = maximumTolerance;
         this.timeUnit = timeUnit;
+        this.lastCompletionDate = lastCompletionDate;
+        this.maxAllowedGap = maxAllowedGap;
 	}
 
     public Long getId() {
@@ -100,5 +109,21 @@ public class Module {
 
     public void setTimeUnit(String timeUnit) {
         this.timeUnit = timeUnit;
+    }
+
+    public String getLastCompletionDate() {
+        return lastCompletionDate;
+    }
+
+    public void setLastCompletionDate(String lastCompletionDate) {
+        this.lastCompletionDate = lastCompletionDate;
+    }
+
+    public Integer getMaxAllowedGap() {
+        return maxAllowedGap;
+    }
+
+    public void setMaxAllowedGap(Integer maxAllowedGap) {
+        this.maxAllowedGap = maxAllowedGap;
     }
 }
