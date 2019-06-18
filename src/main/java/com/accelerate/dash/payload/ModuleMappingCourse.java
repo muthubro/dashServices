@@ -8,25 +8,25 @@
  */
 
 
-// Sub-unit of response of viewModuleSchedule given a course or given a program
+// Course unit of response of viewModuleSchedule (given batch)
 package com.accelerate.dash.payload;
 
 import java.util.List;
 
-public class ModuleMappingResponseData {
-    
+public class ModuleMappingCourse {
+
     private String courseId;
 
     private String courseName;
 
-    private List<ModuleMappingModule> modulesList;
+    private List<ModuleMappingModule2> modules;
 
-    public ModuleMappingResponseData() {}
+    public ModuleMappingCourse() {}
 
-    public ModuleMappingResponseData(String courseId, String courseName, List<ModuleMappingModule> modulesList) {
+    public ModuleMappingCourse(String courseId, String courseName, List<ModuleMappingModule2> modules) {
         this.courseId = courseId;
         this.courseName = courseName;
-        this.modulesList = modulesList;
+        this.modules = modules;
     }
 
     public String getCourseId() {
@@ -45,11 +45,11 @@ public class ModuleMappingResponseData {
         this.courseName = courseName;
     }
 
-    public List<ModuleMappingModule> getModulesList() {
-        return modulesList;
+    public List<ModuleMappingModule2> getModules() {
+        return modules;
     }
 
-    public void setModulesList(List<ModuleMappingModule> modulesList) {
-        this.modulesList = modulesList;
+    public void setModules(List<ModuleMappingModule2> modules) {
+        this.modules = modules;
     }
 }

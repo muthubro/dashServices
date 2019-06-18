@@ -8,6 +8,7 @@
  */
 
 
+// Request format for viewModuleSchedule
 package com.accelerate.dash.payload;
 
 import javax.validation.constraints.NotBlank;

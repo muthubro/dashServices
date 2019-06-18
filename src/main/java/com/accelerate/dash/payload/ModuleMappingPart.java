@@ -8,6 +8,7 @@
  */
 
 
+// The 'part' unit of response to viewModuleSchedule
 package com.accelerate.dash.payload;
 
 public class ModuleMappingPart {

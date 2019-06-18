@@ -8,10 +8,10 @@
  */
 
 
-// Response of viewModuleSchedule given course
+// Response to a viewModuleSchedule given a batch
 package com.accelerate.dash.payload;
 
-public class ModuleMappingCourseResponse {
+public class ModuleMappingBatchResponse {
 
     private String dateFrom;
 
@@ -21,17 +21,17 @@ public class ModuleMappingCourseResponse {
 
     private String programName;
 
-    private ModuleMappingResponseData course;
+    private ModuleMappingResponseData2 batch;
 
-    public ModuleMappingCourseResponse() {}
+    public ModuleMappingBatchResponse() {}
 
-    public ModuleMappingCourseResponse(String dateFrom, String dateTo, String programId, String programName,
-            ModuleMappingResponseData course) {
+    public ModuleMappingBatchResponse(String dateFrom, String dateTo, String programId, String programName,
+            ModuleMappingResponseData2 batch) {
         this.dateFrom = dateFrom;
         this.dateTo = dateTo;
         this.programId = programId;
         this.programName = programName;
-        this.course = course;
+        this.batch = batch;
     }
 
     public String getDateFrom() {
@@ -66,11 +66,11 @@ public class ModuleMappingCourseResponse {
         this.programName = programName;
     }
 
-    public ModuleMappingResponseData getCourse() {
-        return course;
+    public ModuleMappingResponseData2 getBatch() {
+        return batch;
     }
 
-    public void setCourse(ModuleMappingResponseData course) {
-        this.course = course;
+    public void setBatch(ModuleMappingResponseData2 batch) {
+        this.batch = batch;
     }
 }

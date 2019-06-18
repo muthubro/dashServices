@@ -8,26 +8,26 @@
  */
 
 
-// Response to viewModuleSchedule given program
+// Response to viewModuleSchedule given batch
 package com.accelerate.dash.payload;
 
 import com.accelerate.dash.service.StatusCodes;
 
-public class ModuleMappingResponse2 extends ApiResponse {
+public class ModuleMappingResponse3 extends ApiResponse {
 
-    private ModuleMappingAllResponse data;
+    private ModuleMappingBatchResponse data;
 
-    public ModuleMappingResponse2(boolean status, StatusCodes statusCode, String message,
-            ModuleMappingAllResponse data) {
+    public ModuleMappingResponse3(boolean status, StatusCodes statusCode, String message,
+            ModuleMappingBatchResponse data) {
         super(status, statusCode, message);
         this.data = data;
     }
 
-    public ModuleMappingAllResponse getData() {
+    public ModuleMappingBatchResponse getData() {
         return data;
     }
 
-    public void setData(ModuleMappingAllResponse data) {
+    public void setData(ModuleMappingBatchResponse data) {
         this.data = data;
     }
 }

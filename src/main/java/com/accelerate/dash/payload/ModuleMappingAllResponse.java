@@ -8,6 +8,7 @@
  */
 
 
+// Response to a viewModuleSchedule with just program id
 package com.accelerate.dash.payload;
 
 import java.util.List;

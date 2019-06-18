@@ -23,6 +23,10 @@ public interface ModuleBatchMappingRepository extends JpaRepository<ModuleBatchM
 
     Optional<ModuleBatchMapping> findById(Long id);
 
+    List<ModuleBatchMapping> findByIdIn(List<Long> ids);
+
+    List<ModuleBatchMapping> findByBatchId(String batchId);
+
     List<ModuleBatchMapping> findByBatchIdIn(List<String> batchId);
 
     List<ModuleBatchMapping> findByModuleIdAndBatchIdOrderByPartIndexDesc(Long moduleId, String batchId);

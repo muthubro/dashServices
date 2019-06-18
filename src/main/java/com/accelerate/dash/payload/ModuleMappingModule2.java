@@ -8,12 +8,12 @@
  */
 
 
-// Module unit of response of viewModuleSchedule given course or given program
+// Module part of response to viewModuleSchedule given batch
 package com.accelerate.dash.payload;
 
 import java.util.List;
 
-public class ModuleMappingModule {
+public class ModuleMappingModule2 {
     
     private String moduleId;
 
@@ -27,19 +27,32 @@ public class ModuleMappingModule {
 
     private String targetCompletionDate;
 
-    private List<ModuleMappingBatch> batchSchedule;
+    private Boolean isRegistered;
 
-    public ModuleMappingModule() {}
+    private Boolean isMapped;
 
-    public ModuleMappingModule(String moduleId, String moduleName, Double allowedTime, Double timeTolerance,
-            String timeUnit, String targetCompletionDate, List<ModuleMappingBatch> batchSchedule) {
+    private Boolean hasRepeats;
+
+    private Integer overallStatus;
+
+    private List<ModuleMappingRepeat> details;
+
+    public ModuleMappingModule2() {}
+
+    public ModuleMappingModule2(String moduleId, String moduleName, Double allowedTime, Double timeTolerance,
+            String timeUnit, String targetCompletionDate, Boolean isRegistered, Boolean isMapped, 
+            Boolean hasRepeats, Integer overallStatus, List<ModuleMappingRepeat> details) {
         this.moduleId = moduleId;
         this.moduleName = moduleName;
         this.allowedTime = allowedTime;
         this.timeTolerance = timeTolerance;
         this.timeUnit = timeUnit;
         this.targetCompletionDate = targetCompletionDate;
-        this.batchSchedule = batchSchedule;
+        this.isRegistered = isRegistered;
+        this.isMapped = isMapped;
+        this.hasRepeats = hasRepeats;
+        this.overallStatus = overallStatus;
+        this.details = details;
     }
 
     public String getModuleId() {
@@ -90,11 +103,43 @@ public class ModuleMappingModule {
         this.targetCompletionDate = targetCompletionDate;
     }
 
-    public List<ModuleMappingBatch> getBatchSchedule() {
-        return batchSchedule;
+    public List<ModuleMappingRepeat> getDetails() {
+        return details;
     }
 
-    public void setBatchSchedule(List<ModuleMappingBatch> batchSchedule) {
-        this.batchSchedule = batchSchedule;
+    public Boolean getIsRegistered() {
+        return isRegistered;
+    }
+
+    public void setIsRegistered(Boolean isRegistered) {
+        this.isRegistered = isRegistered;
+    }
+
+    public Boolean getIsMapped() {
+        return isMapped;
+    }
+
+    public void setIsMapped(Boolean isMapped) {
+        this.isMapped = isMapped;
+    }
+
+    public void setDetails(List<ModuleMappingRepeat> details) {
+        this.details = details;
+    }
+
+    public Boolean getHasRepeats() {
+        return hasRepeats;
+    }
+
+    public void setHasRepeats(Boolean hasRepeats) {
+        this.hasRepeats = hasRepeats;
+    }
+
+    public Integer getOverallStatus() {
+        return overallStatus;
+    }
+
+    public void setOverallStatus(Integer overallStatus) {
+        this.overallStatus = overallStatus;
     }
 }

@@ -8,6 +8,7 @@
  */
 
 
+// The batch part of viewModuleSchedule response (given course)
 package com.accelerate.dash.payload;
 
 import java.util.List;

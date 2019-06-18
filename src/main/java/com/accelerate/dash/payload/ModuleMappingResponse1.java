@@ -8,6 +8,7 @@
  */
 
 
+// Response to viewModuleSchedule given course
 package com.accelerate.dash.payload;
 
 import com.accelerate.dash.service.StatusCodes;
