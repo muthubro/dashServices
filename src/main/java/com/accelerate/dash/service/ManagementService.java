@@ -27,21 +27,21 @@ import com.accelerate.dash.payload.ApiResponse;
 import com.accelerate.dash.payload.ApproveTeacherLogRequest;
 import com.accelerate.dash.payload.ErrorResponse;
 import com.accelerate.dash.payload.ModuleBatchMappingRequest;
-import com.accelerate.dash.payload.ModuleMappingAllResponse;
+import com.accelerate.dash.payload.ModuleMappingDataForProgram;
 import com.accelerate.dash.payload.ModuleMappingBatch;
-import com.accelerate.dash.payload.ModuleMappingBatchResponse;
+import com.accelerate.dash.payload.ModuleMappingDataForBatch;
 import com.accelerate.dash.payload.ModuleMappingCourse;
-import com.accelerate.dash.payload.ModuleMappingCourseResponse;
+import com.accelerate.dash.payload.ModuleMappingDataForCourse;
 import com.accelerate.dash.payload.ModuleMappingModule;
-import com.accelerate.dash.payload.ModuleMappingModule2;
+import com.accelerate.dash.payload.ModuleMappingModuleForBatch;
 import com.accelerate.dash.payload.ModuleMappingPart;
 import com.accelerate.dash.payload.ModuleMappingRepeat;
 import com.accelerate.dash.payload.ModuleMappingRequest;
-import com.accelerate.dash.payload.ModuleMappingResponse1;
-import com.accelerate.dash.payload.ModuleMappingResponse2;
-import com.accelerate.dash.payload.ModuleMappingResponse3;
-import com.accelerate.dash.payload.ModuleMappingResponseData;
-import com.accelerate.dash.payload.ModuleMappingResponseData2;
+import com.accelerate.dash.payload.ModuleMappingResponseForCourse;
+import com.accelerate.dash.payload.ModuleMappingResponseForProgram;
+import com.accelerate.dash.payload.ModuleMappingResponseForBatch;
+import com.accelerate.dash.payload.ModuleMappingForCourseAndProgram;
+import com.accelerate.dash.payload.ModuleMappingForBatch;
 import com.accelerate.dash.payload.ModuleRequest;
 import com.accelerate.dash.payload.ModuleStatusModifyRequest;
 import com.accelerate.dash.payload.ModuleTimeRequest;
@@ -75,6 +75,7 @@ public class ManagementService {
     public ApiResponse addModule(ModuleRequest moduleRequest) {
         Module module = new Module(moduleRequest.getModuleId(), 
                                    moduleRequest.getModuleName(), 
+                                   moduleRequest.getModuleIndex(),
                                    moduleRequest.getTimeAllotted(),
                                    moduleRequest.getMaximumTolerance(),
                                    moduleRequest.getTimeUnit(),
@@ -424,32 +425,32 @@ public class ManagementService {
         String batchId = request.getBatchId();
 
         if (courseId != null) {         // Schedule given course
-            ModuleMappingResponseData course = getModuleDetailsForCourse(courseId, courseName);
-            ModuleMappingCourseResponse response = new ModuleMappingCourseResponse(request.getDateFrom(), 
+            ModuleMappingForCourseAndProgram course = getModuleDetailsForCourse(courseId, courseName);
+            ModuleMappingDataForCourse response = new ModuleMappingDataForCourse(request.getDateFrom(), 
                                                                                     request.getDateTo(), 
                                                                                     programId, 
                                                                                     programName, 
                                                                                     course);
-            return new ModuleMappingResponse1(true, StatusCodes.SUCCESS, "Fetched module data successfully.", response);            
+            return new ModuleMappingResponseForCourse(true, StatusCodes.SUCCESS, "Fetched module data successfully.", response);            
         } else if (batchId != null) {   // Schedule given batch
-            ModuleMappingResponseData2 batch = getModuleDetailsForBatch(batchId);
-            ModuleMappingBatchResponse response = new ModuleMappingBatchResponse(request.getDateFrom(), 
+            ModuleMappingForBatch batch = getModuleDetailsForBatch(batchId);
+            ModuleMappingDataForBatch response = new ModuleMappingDataForBatch(request.getDateFrom(), 
                                                                                 request.getDateTo(), 
                                                                                 programId, 
                                                                                 programName, 
                                                                                 batch);
-            return new ModuleMappingResponse3(true, StatusCodes.SUCCESS, "Fetched module data successfully.", response);
+            return new ModuleMappingResponseForBatch(true, StatusCodes.SUCCESS, "Fetched module data successfully.", response);
         } else {                        // Complete schedule
-            List<ModuleMappingResponseData> courses = new ArrayList<>();
+            List<ModuleMappingForCourseAndProgram> courses = new ArrayList<>();
             for (int i = 0; i < 3; i++) {
                 courses.add(getModuleDetailsForCourse(Integer.toString(i), Integer.toString(i) + " name"));
             }
-            ModuleMappingAllResponse response = new ModuleMappingAllResponse(request.getDateFrom(), 
+            ModuleMappingDataForProgram response = new ModuleMappingDataForProgram(request.getDateFrom(), 
                                                                             request.getDateTo(), 
                                                                             programId, 
                                                                             programName, 
                                                                             courses);
-            return new ModuleMappingResponse2(true, StatusCodes.SUCCESS, "Fetched module data successfully.", response);
+            return new ModuleMappingResponseForProgram(true, StatusCodes.SUCCESS, "Fetched module data successfully.", response);
         }
     }
 
@@ -458,13 +459,13 @@ public class ManagementService {
      * 
      * @param courseId
      * @param courseName
-     * @return ModuleMappingResponseData
+     * @return ModuleMappingForCourseAndProgram
      */
-    private ModuleMappingResponseData getModuleDetailsForCourse(String courseId, String courseName) {
-        List<Long> moduleIds = getStubModuleIdList();
+    private ModuleMappingForCourseAndProgram getModuleDetailsForCourse(String courseId, String courseName) {
+        List<Long> moduleIds = getStubModuleIdListForCourse();
         List<String> batchIds = getStubBatchIdList();
 
-        List<Module> modules = moduleRepository.findByIdIn(moduleIds);
+        List<Module> modules = moduleRepository.findByIdInOrderByModuleIndexAsc(moduleIds);
 
         // Map : moduleId -> Set(batchId)
         HashMap<Long, HashSet<String>> registered = getStubRegistered();
@@ -554,7 +555,7 @@ public class ManagementService {
                             ModuleMappingPart part = new ModuleMappingPart(mapping.getId(), 
                                                                             mapping.getPartIndex(),
                                                                             mapping.getTeacherCode(),
-                                                                            "Prof. Abhijit CS", 
+                                                                            "Prof. Abhijith CS", 
                                                                             mapping.getProgress(), 
                                                                             mapping.getComments(), 
                                                                             true, 
@@ -616,7 +617,7 @@ public class ManagementService {
             modulesList.add(mmm);
         }
 
-        ModuleMappingResponseData course = new ModuleMappingResponseData(courseId, 
+        ModuleMappingForCourseAndProgram course = new ModuleMappingForCourseAndProgram(courseId, 
                                                                             courseName, 
                                                                             modulesList);
         return course;
@@ -626,10 +627,10 @@ public class ManagementService {
      * Given a batch, return details of the modules
      * 
      * @param batchId
-     * @return ModuleMappingResponseData2
+     * @return ModuleMappingForBatch
      */
-    private ModuleMappingResponseData2 getModuleDetailsForBatch(String batchId) {
-        List<Long> moduleIds = getStubModuleIdList();
+    private ModuleMappingForBatch getModuleDetailsForBatch(String batchId) {
+        List<Long> moduleIds = getStubModuleIdListForBatch();
         List<String> courseIds = getStubCourseList();
 
         List<Module> moduleList = moduleRepository.findByIdIn(moduleIds);
@@ -643,6 +644,36 @@ public class ManagementService {
 
         // Map : courseId -> List(moduleId)
         HashMap<String, List<Long>> courseModules = getCourseModules();
+
+        Module tempModule;
+        for (String course : courseIds) {
+            List<Long> temp = new ArrayList<>();
+
+            for (Long mod : courseModules.get(course)) {
+                if (temp.isEmpty()) {
+                    temp.add(mod);
+                    continue;
+                }
+
+                int low = 0, high = temp.size() - 1;
+                while (low < high) {
+                    int mid = (low + high) / 2;
+                    tempModule = modules.get(temp.get(mid));
+    
+                    if (tempModule.getModuleIndex() > modules.get(mod).getModuleIndex()) {
+                        high = mid-1;
+                    }
+    
+                    else {
+                        low = mid+1;
+                    }
+                }
+                int idx = modules.get(temp.get(low)).getModuleIndex() < modules.get(mod).getModuleIndex() ? low + 1 : low;
+                temp.add(idx, mod);
+            }
+
+            courseModules.put(course, temp);
+        }
 
         // Map : moduleId -> List(mapping)
         HashMap<Long, List<ModuleBatchMapping>> mapped = new HashMap<>();
@@ -681,10 +712,10 @@ public class ManagementService {
 
         List<ModuleMappingCourse> courseList = new ArrayList<>();
         for (String course : courseIds) {
-            List<ModuleMappingModule2> moduleSchedule = new ArrayList<>();
+            List<ModuleMappingModuleForBatch> moduleSchedule = new ArrayList<>();
             for (Long moduleId : courseModules.get(course)) {
                 List<ModuleMappingRepeat> details = new ArrayList<>();
-                ModuleMappingModule2 mmm = new ModuleMappingModule2();
+                ModuleMappingModuleForBatch mmm = new ModuleMappingModuleForBatch();
 
                 List<ModuleBatchMapping> list = mapped.get(moduleId);
 
@@ -719,7 +750,7 @@ public class ManagementService {
                             ModuleMappingPart part = new ModuleMappingPart(mapping.getId(), 
                                                                             mapping.getPartIndex(),
                                                                             mapping.getTeacherCode(),
-                                                                            "Prof. Abhijit CS", 
+                                                                            "Prof. Abhijith CS", 
                                                                             mapping.getProgress(), 
                                                                             mapping.getComments(), 
                                                                             true, 
@@ -781,13 +812,17 @@ public class ManagementService {
             courseList.add(mmc);
         }
 
-        ModuleMappingResponseData2 batch = new ModuleMappingResponseData2(batchId, "batch name", courseList);
+        ModuleMappingForBatch batch = new ModuleMappingForBatch(batchId, "batch name", courseList);
         return batch;
     }
 
-    private List<Long> getStubModuleIdList() {
+    private List<Long> getStubModuleIdListForBatch() {
         return new ArrayList(Arrays.asList(Long.valueOf(2), Long.valueOf(3), Long.valueOf(4), Long.valueOf(5), Long.valueOf(6),
-                Long.valueOf(7), Long.valueOf(8)));
+                Long.valueOf(7), Long.valueOf(1)));
+    }
+
+    private List<Long> getStubModuleIdListForCourse() {
+        return new ArrayList(Arrays.asList(Long.valueOf(2), Long.valueOf(3), Long.valueOf(4), Long.valueOf(5), Long.valueOf(1)));
     }
 
     private List<String> getStubBatchIdList() {
@@ -812,37 +847,37 @@ public class ManagementService {
         c.add("IIT");
 
         HashMap<Long, HashSet<String>> map = new HashMap<>();
-        map.put(Long.parseLong("2"), a);
-        map.put(Long.parseLong("3"), b);
-        map.put(Long.parseLong("4"), c);
-        map.put(Long.parseLong("5"), a);
-        map.put(Long.parseLong("6"), b);
+        map.put(Long.parseLong("1"), a);
+        map.put(Long.parseLong("2"), b);
+        map.put(Long.parseLong("3"), c);
+        map.put(Long.parseLong("4"), a);
+        map.put(Long.parseLong("5"), b);
 
         return map;
     }
 
     private HashSet<Long> getStubRegistered2() {
         HashSet<Long> set = new HashSet<>();
-        set.add(Long.valueOf(2));
+        set.add(Long.valueOf(1));
+        set.add(Long.valueOf(3));
         set.add(Long.valueOf(4));
-        set.add(Long.valueOf(5));
 
         return set;
     }
 
     private HashMap<String, List<Long>> getCourseModules() {
         List<Long> a = new ArrayList<>();
+        a.add(Long.valueOf(1));
         a.add(Long.valueOf(2));
         a.add(Long.valueOf(3));
         a.add(Long.valueOf(4));
         a.add(Long.valueOf(5));
-        a.add(Long.valueOf(6));
 
         List<Long> b = new ArrayList<>();
-        b.add(Long.valueOf(7));
+        b.add(Long.valueOf(6));
 
         List<Long> c = new ArrayList<>();
-        c.add(Long.valueOf(8));
+        c.add(Long.valueOf(7));
 
         HashMap<String, List<Long>> map = new HashMap<>();
         map.put("PHYSICS", a);

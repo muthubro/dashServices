@@ -13,21 +13,21 @@ package com.accelerate.dash.payload;
 
 import com.accelerate.dash.service.StatusCodes;
 
-public class ModuleMappingResponse2 extends ApiResponse {
+public class ModuleMappingResponseForProgram extends ApiResponse {
 
-    private ModuleMappingAllResponse data;
+    private ModuleMappingDataForProgram data;
 
-    public ModuleMappingResponse2(boolean status, StatusCodes statusCode, String message,
-            ModuleMappingAllResponse data) {
+    public ModuleMappingResponseForProgram(boolean status, StatusCodes statusCode, String message,
+            ModuleMappingDataForProgram data) {
         super(status, statusCode, message);
         this.data = data;
     }
 
-    public ModuleMappingAllResponse getData() {
+    public ModuleMappingDataForProgram getData() {
         return data;
     }
 
-    public void setData(ModuleMappingAllResponse data) {
+    public void setData(ModuleMappingDataForProgram data) {
         this.data = data;
     }
 }

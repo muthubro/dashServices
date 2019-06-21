@@ -13,7 +13,7 @@ package com.accelerate.dash.payload;
 
 import java.util.List;
 
-public class ModuleMappingResponseData {
+public class ModuleMappingForCourseAndProgram {
     
     private String courseId;
 
@@ -21,9 +21,9 @@ public class ModuleMappingResponseData {
 
     private List<ModuleMappingModule> modulesList;
 
-    public ModuleMappingResponseData() {}
+    public ModuleMappingForCourseAndProgram() {}
 
-    public ModuleMappingResponseData(String courseId, String courseName, List<ModuleMappingModule> modulesList) {
+    public ModuleMappingForCourseAndProgram(String courseId, String courseName, List<ModuleMappingModule> modulesList) {
         this.courseId = courseId;
         this.courseName = courseName;
         this.modulesList = modulesList;

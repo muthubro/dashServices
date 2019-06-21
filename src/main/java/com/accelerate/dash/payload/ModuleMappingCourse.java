@@ -19,11 +19,11 @@ public class ModuleMappingCourse {
 
     private String courseName;
 
-    private List<ModuleMappingModule2> modules;
+    private List<ModuleMappingModuleForBatch> modules;
 
     public ModuleMappingCourse() {}
 
-    public ModuleMappingCourse(String courseId, String courseName, List<ModuleMappingModule2> modules) {
+    public ModuleMappingCourse(String courseId, String courseName, List<ModuleMappingModuleForBatch> modules) {
         this.courseId = courseId;
         this.courseName = courseName;
         this.modules = modules;
@@ -45,11 +45,11 @@ public class ModuleMappingCourse {
         this.courseName = courseName;
     }
 
-    public List<ModuleMappingModule2> getModules() {
+    public List<ModuleMappingModuleForBatch> getModules() {
         return modules;
     }
 
-    public void setModules(List<ModuleMappingModule2> modules) {
+    public void setModules(List<ModuleMappingModuleForBatch> modules) {
         this.modules = modules;
     }
 }

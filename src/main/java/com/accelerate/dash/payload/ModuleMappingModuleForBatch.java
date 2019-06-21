@@ -13,7 +13,7 @@ package com.accelerate.dash.payload;
 
 import java.util.List;
 
-public class ModuleMappingModule2 {
+public class ModuleMappingModuleForBatch {
     
     private String moduleId;
 
@@ -37,9 +37,9 @@ public class ModuleMappingModule2 {
 
     private List<ModuleMappingRepeat> details;
 
-    public ModuleMappingModule2() {}
+    public ModuleMappingModuleForBatch() {}
 
-    public ModuleMappingModule2(String moduleId, String moduleName, Double allowedTime, Double timeTolerance,
+    public ModuleMappingModuleForBatch(String moduleId, String moduleName, Double allowedTime, Double timeTolerance,
             String timeUnit, String targetCompletionDate, Boolean isRegistered, Boolean isMapped, 
             Boolean hasRepeats, Integer overallStatus, List<ModuleMappingRepeat> details) {
         this.moduleId = moduleId;

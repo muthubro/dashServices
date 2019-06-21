@@ -17,6 +17,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.NaturalId;
 
@@ -35,6 +36,9 @@ public class Module {
     @NotBlank
     private String moduleName;
 
+    @NotNull
+    private Integer moduleIndex;
+
     @Column(name = "time_alloted")
     private Double timeAllotted;
 
@@ -52,10 +56,11 @@ public class Module {
 
     public Module() {}
 
-    public Module(String moduleId, String moduleName, Double timeAllotted, Double maximumTolerance, String timeUnit,
-            String lastCompletionDate, Integer maxAllowedGap) {
+    public Module(String moduleId, String moduleName, Integer moduleIndex, Double timeAllotted, 
+            Double maximumTolerance, String timeUnit, String lastCompletionDate, Integer maxAllowedGap) {
 		this.moduleId = moduleId;
-		this.moduleName = moduleName;
+        this.moduleName = moduleName;
+        this.moduleIndex = moduleIndex;
 		this.timeAllotted = timeAllotted;
         this.maximumTolerance = maximumTolerance;
         this.timeUnit = timeUnit;
@@ -125,5 +130,13 @@ public class Module {
 
     public void setMaxAllowedGap(Integer maxAllowedGap) {
         this.maxAllowedGap = maxAllowedGap;
+    }
+
+    public Integer getModuleIndex() {
+        return moduleIndex;
+    }
+
+    public void setModuleIndex(Integer moduleIndex) {
+        this.moduleIndex = moduleIndex;
     }
 }

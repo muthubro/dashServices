@@ -11,6 +11,7 @@
 package com.accelerate.dash.payload;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 // Request format for module creation
 public class ModuleRequest {
@@ -20,6 +21,9 @@ public class ModuleRequest {
 
     @NotBlank
     private String moduleName;
+
+    @NotNull
+    private Integer moduleIndex;
 
     private Double timeAllotted;
 
@@ -33,10 +37,11 @@ public class ModuleRequest {
 
     public ModuleRequest() {}
 
-    public ModuleRequest(String moduleId, String moduleName, Double timeAllotted, Double maximumTolerance, String timeUnit,
-            String lastCompletionDate, Integer maxAllowedGap) {
+    public ModuleRequest(String moduleId, String moduleName, Integer moduleIndex, Double timeAllotted, 
+            Double maximumTolerance, String timeUnit, String lastCompletionDate, Integer maxAllowedGap) {
         this.moduleId = moduleId;
         this.moduleName = moduleName;
+        this.moduleIndex = moduleIndex;
         this.timeAllotted = timeAllotted;
         this.maximumTolerance = maximumTolerance;
         this.timeUnit = timeUnit;
@@ -98,5 +103,13 @@ public class ModuleRequest {
 
     public void setMaxAllowedGap(Integer maxAllowedGap) {
         this.maxAllowedGap = maxAllowedGap;
+    }
+
+    public Integer getModuleIndex() {
+        return moduleIndex;
+    }
+
+    public void setModuleIndex(Integer moduleIndex) {
+        this.moduleIndex = moduleIndex;
     }
 }

@@ -8,12 +8,10 @@
  */
 
 
-// Response to a viewModuleSchedule with just program id
+// Response of viewModuleSchedule given course
 package com.accelerate.dash.payload;
 
-import java.util.List;
-
-public class ModuleMappingAllResponse {
+public class ModuleMappingDataForCourse {
 
     private String dateFrom;
 
@@ -23,12 +21,12 @@ public class ModuleMappingAllResponse {
 
     private String programName;
 
-    private List<ModuleMappingResponseData> course;
+    private ModuleMappingForCourseAndProgram course;
 
-    public ModuleMappingAllResponse() {}
+    public ModuleMappingDataForCourse() {}
 
-    public ModuleMappingAllResponse(String dateFrom, String dateTo, String programId, String programName,
-            List<ModuleMappingResponseData> course) {
+    public ModuleMappingDataForCourse(String dateFrom, String dateTo, String programId, String programName,
+            ModuleMappingForCourseAndProgram course) {
         this.dateFrom = dateFrom;
         this.dateTo = dateTo;
         this.programId = programId;
@@ -68,11 +66,11 @@ public class ModuleMappingAllResponse {
         this.programName = programName;
     }
 
-    public List<ModuleMappingResponseData> getCourse() {
+    public ModuleMappingForCourseAndProgram getCourse() {
         return course;
     }
 
-    public void setCourse(List<ModuleMappingResponseData> course) {
+    public void setCourse(ModuleMappingForCourseAndProgram course) {
         this.course = course;
     }
 }

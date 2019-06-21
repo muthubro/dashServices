@@ -13,7 +13,7 @@ package com.accelerate.dash.payload;
 
 import java.util.List;
 
-public class ModuleMappingResponseData2 {
+public class ModuleMappingForBatch {
     
     private String batchId;
 
@@ -21,9 +21,9 @@ public class ModuleMappingResponseData2 {
 
     private List<ModuleMappingCourse> courseList;
 
-    public ModuleMappingResponseData2() {}
+    public ModuleMappingForBatch() {}
 
-    public ModuleMappingResponseData2(String batchId, String batchName, List<ModuleMappingCourse> courseList) {
+    public ModuleMappingForBatch(String batchId, String batchName, List<ModuleMappingCourse> courseList) {
         this.batchId = batchId;
         this.batchName = batchName;
         this.courseList = courseList;
